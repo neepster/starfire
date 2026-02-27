@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_shipdata"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_weapondata"]
+
+[sub_resource type="Resource" id="weapon_1"]
+script = ExtResource("2_weapondata")
+weapon_name = "Laser B"
+damage = 3
+range_hexes = 6
+arc = 0
+shots_per_turn = 1
+
+[sub_resource type="Resource" id="weapon_2"]
+script = ExtResource("2_weapondata")
+weapon_name = "Laser A (Port)"
+damage = 2
+range_hexes = 5
+arc = 2
+shots_per_turn = 1
+
+[resource]
+script = ExtResource("1_shipdata")
+ship_name = "Light Cruiser"
+ship_class = "Light Cruiser"
+hull_points = 3
+drive_rating = 5
+weapons = [SubResource("weapon_1"), SubResource("weapon_2")]
+system_boxes = PackedStringArray("A", "A", "H", "H", "H", "D", "D", "W0", "W1")
+sprite_path = "res://assets/ship_images/cl_blue.png"
+description = "A well-rounded cruiser balancing speed and firepower."

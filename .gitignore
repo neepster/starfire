@@ -1,0 +1,23 @@
+# Godot 4 editor cache — generated locally, do not commit
+.godot/
+
+# Export configuration (may contain signing credentials)
+export_presets.cfg
+
+# Mono / C# build artifacts
+.mono/
+data_*/
+mono_crash.*.json
+
+# Claude Code local config (session memory, project hooks)
+.claude/
+.mcp.json
+
+# Starfire rules PDF — copyrighted, not for public distribution
+3edR_201211.pdf
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

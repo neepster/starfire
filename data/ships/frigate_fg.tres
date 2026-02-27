@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_shipdata"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_weapondata"]
+
+[sub_resource type="Resource" id="weapon_1"]
+script = ExtResource("2_weapondata")
+weapon_name = "Laser A"
+damage = 2
+range_hexes = 5
+arc = 0
+shots_per_turn = 1
+
+[resource]
+script = ExtResource("1_shipdata")
+ship_name = "Frigate"
+ship_class = "Frigate"
+hull_points = 2
+drive_rating = 5
+weapons = [SubResource("weapon_1")]
+system_boxes = PackedStringArray("A", "H", "H", "D", "D", "W0")
+sprite_path = "res://assets/ship_images/fg_blue.png"
+description = "A light combatant. Faster than a destroyer with a single forward weapon."

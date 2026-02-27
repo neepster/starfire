@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_shipdata"]
+
+[resource]
+script = ExtResource("1_shipdata")
+ship_name = "Escort"
+ship_class = "Escort"
+hull_points = 1
+drive_rating = 4
+weapons = []
+system_boxes = PackedStringArray("H", "D", "D")
+sprite_path = "res://assets/ship_images/es_blue.png"
+description = "A small unarmed escort. Useful for screening and scouting."

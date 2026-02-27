@@ -1,0 +1,78 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/ShipClassImportDialog.gd" id="1_dialog"]
+
+[node name="ShipClassImportDialog" type="Window"]
+title = "Import Ship Class"
+size = Vector2i(700, 480)
+min_size = Vector2i(500, 380)
+script = ExtResource("1_dialog")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/separation = 10
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+
+[node name="InstrLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Paste a Starfire 3rd-edition ship class string below:"
+theme_override_font_sizes/font_size = 14
+
+[node name="PasteField" type="TextEdit" parent="VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 100)
+size_flags_vertical = 3
+placeholder_text = "e.g. CROMWELL-class SD AM(2) 26 XO 130 HS TL 9[3] Sx13Ax14ZH... [5/2]"
+wrap_mode = 1
+
+[node name="BtnRow1" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+
+[node name="BtnParse" type="Button" parent="VBox/BtnRow1"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 36)
+text = "Parse"
+
+[node name="Spacer1" type="Control" parent="VBox/BtnRow1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PreviewLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "Preview:"
+theme_override_font_sizes/font_size = 14
+
+[node name="PreviewText" type="RichTextLabel" parent="VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 160)
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[color=gray]Paste a class string above and click Parse.[/color]"
+theme_override_font_sizes/normal_font_size = 13
+
+[node name="BtnRow2" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BtnHuman" type="Button" parent="VBox/BtnRow2"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 40)
+text = "Add to Human Fleet"
+
+[node name="BtnAI" type="Button" parent="VBox/BtnRow2"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 40)
+text = "Add to AI Fleet"
+
+[node name="Spacer2" type="Control" parent="VBox/BtnRow2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnCancel" type="Button" parent="VBox/BtnRow2"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 40)
+text = "Cancel"

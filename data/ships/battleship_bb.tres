@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_shipdata"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_weapondata"]
+
+[sub_resource type="Resource" id="weapon_1"]
+script = ExtResource("2_weapondata")
+weapon_name = "Laser C (Fwd)"
+damage = 5
+range_hexes = 8
+arc = 0
+shots_per_turn = 1
+
+[sub_resource type="Resource" id="weapon_2"]
+script = ExtResource("2_weapondata")
+weapon_name = "Laser C (Fwd Wide)"
+damage = 5
+range_hexes = 8
+arc = 1
+shots_per_turn = 1
+
+[sub_resource type="Resource" id="weapon_3"]
+script = ExtResource("2_weapondata")
+weapon_name = "Laser B (Port)"
+damage = 3
+range_hexes = 6
+arc = 2
+shots_per_turn = 1
+
+[sub_resource type="Resource" id="weapon_4"]
+script = ExtResource("2_weapondata")
+weapon_name = "Laser B (Starboard)"
+damage = 3
+range_hexes = 6
+arc = 3
+shots_per_turn = 1
+
+[resource]
+script = ExtResource("1_shipdata")
+ship_name = "Battleship"
+ship_class = "Battleship"
+hull_points = 6
+drive_rating = 3
+weapons = [SubResource("weapon_1"), SubResource("weapon_2"), SubResource("weapon_3"), SubResource("weapon_4")]
+system_boxes = PackedStringArray("A", "A", "A", "H", "H", "H", "H", "H", "H", "D", "D", "W0", "W1", "W2", "W3")
+sprite_path = "res://assets/ship_images/bb_blue.png"
+description = "The mightiest warship. Slow but devastating — a floating fortress."

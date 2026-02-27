@@ -1,0 +1,79 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/HUD.gd" id="1_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ShipInfoPanel.tscn" id="2_shipinfo"]
+
+[node name="HUD" type="Node"]
+script = ExtResource("1_hud")
+
+[node name="TopBar" type="PanelContainer" parent="."]
+anchor_right = 1.0
+offset_bottom = 56.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="LblTurn" type="Label" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+text = "Turn: 1"
+theme_override_font_sizes/font_size = 18
+vertical_alignment = 1
+
+[node name="LblPhase" type="Label" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+text = "Phase: Movement Plot"
+theme_override_font_sizes/font_size = 18
+vertical_alignment = 1
+
+[node name="Spacer" type="Control" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnImportShip" type="Button" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 40)
+text = "Import Ship"
+
+[node name="BtnEndTurn" type="Button" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 40)
+text = "End Turn"
+
+[node name="BottomPanel" type="PanelContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 0.4
+anchor_bottom = 1.0
+offset_top = -180.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ShipInfoPanel" type="PanelContainer" parent="BottomPanel" instance=ExtResource("2_shipinfo")]
+layout_mode = 2
+
+[node name="CombatLog" type="PanelContainer" parent="."]
+anchor_left = 0.6
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="VBox" type="VBoxContainer" parent="CombatLog"]
+layout_mode = 2
+
+[node name="LblLogTitle" type="Label" parent="CombatLog/VBox"]
+layout_mode = 2
+text = "Combat Log"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+
+[node name="LogText" type="RichTextLabel" parent="CombatLog/VBox"]
+layout_mode = 2
+bbcode_enabled = true
+scroll_following = true
+custom_minimum_size = Vector2(0, 150)
+theme_override_font_sizes/normal_font_size = 13
+text = ""
