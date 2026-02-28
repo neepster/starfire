@@ -127,6 +127,9 @@ static func _tokenize(s: String) -> Array[String]:
 			var tok := c
 			pos += 1
 			while pos < s.length() and _is_lower(s[pos]):
+				# Stop if we see 'x' followed by a digit — that is a multiplier, not part of the token name
+				if s[pos] == "x" and pos + 1 < s.length() and s[pos + 1].is_valid_int():
+					break
 				tok += s[pos]
 				pos += 1
 			while pos < s.length() and s[pos].is_valid_int():
@@ -171,9 +174,12 @@ static func _map_token(tok: String, w_idx: int, weapons: Array[Resource]) -> Str
 	# Hull and internal structure
 	if tok == "H" or tok == "I":
 		return "H"
-	# Armor and shields
-	if tok == "A" or tok == "S":
+	# Armor
+	if tok == "A":
 		return "A"
+	# Shields — distinct from armor so they display correctly
+	if tok == "S":
+		return "S"
 	# Drive systems
 	if tok == "D" or tok == "Di" or tok == "Q":
 		return "D"

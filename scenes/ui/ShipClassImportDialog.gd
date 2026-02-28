@@ -46,6 +46,8 @@ func _show_preview(data: ShipData) -> void:
 		var col: String
 		if box == "H":
 			col = "lime"
+		elif box == "S":
+			col = "lightblue"
 		elif box == "A":
 			col = "yellow"
 		elif box == "D":

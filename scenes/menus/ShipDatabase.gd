@@ -229,7 +229,7 @@ func _on_list_ship_selected(index: int) -> void:
 	]
 	t += "Boxes: "
 	for box in data.system_boxes:
-		var col: String = {"H": "lime", "A": "yellow", "D": "cyan"}.get(box, "orange")
+		var col: String = {"H": "lime", "S": "lightblue", "A": "yellow", "D": "cyan"}.get(box, "orange")
 		t += "[color=%s][%s][/color]" % [col, box]
 	t += "\n"
 	if data.description != "":
@@ -266,7 +266,7 @@ func _show_preview(data: ShipData) -> void:
 	t += "Drive: %d   Hull boxes: %d\n" % [data.drive_rating, data.hull_points]
 	t += "System boxes: "
 	for box in data.system_boxes:
-		var col: String = {"H": "lime", "A": "yellow", "D": "cyan"}.get(box, "orange")
+		var col: String = {"H": "lime", "S": "lightblue", "A": "yellow", "D": "cyan"}.get(box, "orange")
 		t += "[color=%s][%s][/color]" % [col, box]
 	t += "\n"
 	if data.weapons.size() > 0:

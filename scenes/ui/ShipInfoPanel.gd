@@ -91,6 +91,8 @@ func _build_box_strip(s: Ship) -> String:
 			var col: String
 			if box == "H":
 				col = "lime"
+			elif box == "S":
+				col = "lightblue"
 			elif box == "A":
 				col = "yellow"
 			elif box == "D":
