@@ -37,8 +37,10 @@ static func _extract_header(s: String, data: ShipData) -> void:
 	rx.compile("(\\w+)-class\\s+(\\w+)")
 	var m := rx.search(s)
 	if m:
-		data.ship_name = m.get_string(1).capitalize()
-		data.ship_class = m.get_string(2)
+		var name_part := m.get_string(1).capitalize()   # e.g. "Cromwell"
+		var class_code := m.get_string(2)               # e.g. "SD"
+		data.ship_name  = "%s %s" % [name_part, class_code]  # "Cromwell SD"
+		data.ship_class = class_code
 		return
 	# Fallback: first two whitespace-separated tokens
 	var parts := s.split(" ", false)

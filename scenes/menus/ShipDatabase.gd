@@ -1,4 +1,4 @@
-## ShipDatabase.gd — Browse, parse, and permanently save ship class .tres files.
+## ShipDatabase.gd — Browse, parse, delete, and permanently save ship class .tres files.
 ## Accessible from the Main Menu. Ships saved here appear in-game and in the import dialog.
 extends CanvasLayer
 
@@ -6,12 +6,14 @@ const DATA_DIR   := "res://data/ships/"
 const SPRITE_DIR := "res://assets/ship_images/"
 
 var _ship_paths: Array[String] = []      # sorted .tres paths
+var _selected_list_index: int = -1       # which saved ship is highlighted
 var _parsed_data: ShipData = null
 var _sprite_codes: Array[String] = []    # e.g. ["bb", "bc", "ca", ...]
 
 # UI refs built in _build_ui
 var _list: ItemList
 var _detail_rtl: RichTextLabel
+var _delete_btn: Button
 var _paste_field: TextEdit
 var _preview_rtl: RichTextLabel
 var _name_field: LineEdit
@@ -59,7 +61,6 @@ func _build_ui() -> void:
 	title_lbl.add_theme_font_size_override("font_size", 28)
 	title_bar.add_child(title_lbl)
 
-	# Spacer to balance the back button
 	var spacer := Control.new()
 	spacer.custom_minimum_size = Vector2(110, 0)
 	title_bar.add_child(spacer)
@@ -71,7 +72,7 @@ func _build_ui() -> void:
 	split.add_theme_constant_override("separation", 8)
 	root.add_child(split)
 
-	# ── Left panel: existing ships ───────────────────────────────────────────
+	# ── Left panel: saved ships list ─────────────────────────────────────────
 	var left := VBoxContainer.new()
 	left.custom_minimum_size = Vector2(300, 0)
 	left.add_theme_constant_override("separation", 6)
@@ -91,8 +92,14 @@ func _build_ui() -> void:
 	_detail_rtl.bbcode_enabled = true
 	_detail_rtl.fit_content = true
 	_detail_rtl.scroll_active = false
-	_detail_rtl.custom_minimum_size = Vector2(0, 160)
+	_detail_rtl.custom_minimum_size = Vector2(0, 150)
 	left.add_child(_detail_rtl)
+
+	_delete_btn = Button.new()
+	_delete_btn.text = "Delete Selected Ship"
+	_delete_btn.disabled = true
+	_delete_btn.pressed.connect(_on_delete_pressed)
+	left.add_child(_delete_btn)
 
 	# ── Right panel: import / save ───────────────────────────────────────────
 	var right := VBoxContainer.new()
@@ -125,16 +132,16 @@ func _build_ui() -> void:
 
 	right.add_child(HSeparator.new())
 
-	# Editable class name
+	# Display name (editable — e.g. "Cromwell SD")
 	var name_row := HBoxContainer.new()
 	right.add_child(name_row)
 	var name_lbl := Label.new()
-	name_lbl.text = "Class name:"
-	name_lbl.custom_minimum_size = Vector2(110, 0)
+	name_lbl.text = "Display name:"
+	name_lbl.custom_minimum_size = Vector2(120, 0)
 	name_row.add_child(name_lbl)
 	_name_field = LineEdit.new()
 	_name_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_name_field.placeholder_text = "e.g. SD"
+	_name_field.placeholder_text = "e.g. Cromwell SD"
 	name_row.add_child(_name_field)
 
 	# Description
@@ -142,7 +149,7 @@ func _build_ui() -> void:
 	right.add_child(desc_row)
 	var desc_lbl := Label.new()
 	desc_lbl.text = "Description:"
-	desc_lbl.custom_minimum_size = Vector2(110, 0)
+	desc_lbl.custom_minimum_size = Vector2(120, 0)
 	desc_row.add_child(desc_lbl)
 	_desc_field = LineEdit.new()
 	_desc_field.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -154,7 +161,7 @@ func _build_ui() -> void:
 	right.add_child(sprite_row)
 	var sprite_lbl := Label.new()
 	sprite_lbl.text = "Sprite:"
-	sprite_lbl.custom_minimum_size = Vector2(110, 0)
+	sprite_lbl.custom_minimum_size = Vector2(120, 0)
 	sprite_row.add_child(sprite_lbl)
 	_sprite_option = OptionButton.new()
 	_sprite_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -194,6 +201,9 @@ func _populate_sprite_options() -> void:
 
 func _refresh_ship_list() -> void:
 	_ship_paths.clear()
+	_selected_list_index = -1
+	_delete_btn.disabled = true
+	_detail_rtl.text = ""
 	_list.clear()
 
 	var dir := DirAccess.open(DATA_DIR)
@@ -218,6 +228,9 @@ func _refresh_ship_list() -> void:
 # ── Signal handlers ──────────────────────────────────────────────────────────
 
 func _on_list_ship_selected(index: int) -> void:
+	_selected_list_index = index
+	_delete_btn.disabled = false
+
 	var data := load(_ship_paths[index]) as ShipData
 	if data == null:
 		_detail_rtl.text = "[color=red]Failed to load.[/color]"
@@ -237,6 +250,27 @@ func _on_list_ship_selected(index: int) -> void:
 	_detail_rtl.text = t
 
 
+func _on_delete_pressed() -> void:
+	if _selected_list_index < 0 or _selected_list_index >= _ship_paths.size():
+		return
+
+	var path := _ship_paths[_selected_list_index]
+	var dir := DirAccess.open(DATA_DIR)
+	if dir == null:
+		_status_lbl.modulate = Color(1.0, 0.3, 0.3)
+		_status_lbl.text = "Could not open data directory."
+		return
+
+	var err := dir.remove(path.get_file())
+	if err == OK:
+		_status_lbl.modulate = Color(0.2, 1.0, 0.2)
+		_status_lbl.text = "Deleted: %s" % path.get_file()
+		_refresh_ship_list()
+	else:
+		_status_lbl.modulate = Color(1.0, 0.3, 0.3)
+		_status_lbl.text = "Delete failed (error %d)" % err
+
+
 func _on_parse_pressed() -> void:
 	var input: String = _paste_field.text.strip_edges()
 	if input.is_empty():
@@ -246,11 +280,11 @@ func _on_parse_pressed() -> void:
 	_parsed_data = ShipClassParser.parse(input)
 	_show_preview(_parsed_data)
 
-	# Pre-fill editable fields
-	_name_field.text = _parsed_data.ship_class
+	# Pre-fill editable fields — ship_name is now "Cromwell SD", ship_class is "SD"
+	_name_field.text = _parsed_data.ship_name
 	_desc_field.text  = _parsed_data.description
 
-	# Pre-select matching sprite in dropdown
+	# Pre-select matching sprite from class code
 	var guessed := _parsed_data.ship_class.to_lower()
 	for i in _sprite_codes.size():
 		if _sprite_codes[i] == guessed:
@@ -287,11 +321,10 @@ func _on_save_pressed() -> void:
 	if _parsed_data == null:
 		return
 
-	# Apply user edits
-	var class_edit: String = _name_field.text.strip_edges()
-	if class_edit != "":
-		_parsed_data.ship_class = class_edit
-		_parsed_data.ship_name  = class_edit
+	# Apply display name edit (does NOT change ship_class — keep type code for sprites/naming)
+	var name_edit: String = _name_field.text.strip_edges()
+	if name_edit != "":
+		_parsed_data.ship_name = name_edit
 
 	_parsed_data.description = _desc_field.text.strip_edges()
 
@@ -300,7 +333,7 @@ func _on_save_pressed() -> void:
 	if sel >= 0 and sel < _sprite_codes.size():
 		_parsed_data.sprite_path = "%s%s_blue.png" % [SPRITE_DIR, _sprite_codes[sel]]
 
-	# Build a safe filename from the class code
+	# Filename derived from class code (e.g. "SD" → "sd.tres")
 	var raw_name: String = _parsed_data.ship_class.to_lower()
 	for ch in [" ", "/", "\\", ":", "*", "?", "\"", "<", ">", "|"]:
 		raw_name = raw_name.replace(ch, "_")

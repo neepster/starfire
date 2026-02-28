@@ -13,7 +13,7 @@ func _ready() -> void:
 
 
 func _on_new_game_pressed() -> void:
-	SceneLoader.load_scene("res://scenes/battle/BattleScene.tscn")
+	SceneLoader.load_scene("res://scenes/menus/FleetBuilder.tscn")
 
 
 func _on_ship_database_pressed() -> void:

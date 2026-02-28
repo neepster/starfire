@@ -1,0 +1,114 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=23 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_o6wr3"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_4xmt5"]
+
+[sub_resource type="Resource" id="Resource_s53pu"]
+script = ExtResource("2_4xmt5")
+weapon_name = "R"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_w2du8"]
+script = ExtResource("2_4xmt5")
+weapon_name = "M"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_wwshu"]
+script = ExtResource("2_4xmt5")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_w3ng2"]
+script = ExtResource("2_4xmt5")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_eno82"]
+script = ExtResource("2_4xmt5")
+weapon_name = "M"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_gabje"]
+script = ExtResource("2_4xmt5")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_y22og"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_coh53"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Fc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_2gtbn"]
+script = ExtResource("2_4xmt5")
+weapon_name = "M2"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_1y76q"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Fc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_2jkpa"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_6uvl4"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_8iyra"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Fc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_8x1hr"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Fc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_m5xar"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_n5w3q"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_0b4jg"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_xoid0"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Lh"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_moa6y"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Fc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_3puwx"]
+script = ExtResource("2_4xmt5")
+weapon_name = "Fc"
+damage = 3
+
+[resource]
+script = ExtResource("1_o6wr3")
+ship_name = "Cromwell SD"
+ship_class = "Cromwell SD"
+hull_points = 23
+drive_rating = 5
+weapons = Array[Resource]([SubResource("Resource_s53pu"), SubResource("Resource_w2du8"), SubResource("Resource_wwshu"), SubResource("Resource_w3ng2"), SubResource("Resource_eno82"), SubResource("Resource_gabje"), SubResource("Resource_y22og"), SubResource("Resource_coh53"), SubResource("Resource_2gtbn"), SubResource("Resource_1y76q"), SubResource("Resource_2jkpa"), SubResource("Resource_6uvl4"), SubResource("Resource_8iyra"), SubResource("Resource_8x1hr"), SubResource("Resource_m5xar"), SubResource("Resource_n5w3q"), SubResource("Resource_0b4jg"), SubResource("Resource_xoid0"), SubResource("Resource_moa6y"), SubResource("Resource_3puwx")])
+sprite_path = "res://assets/ship_images/sd_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12", "W13", "W14", "W15", "W16", "W17", "W18", "W19")

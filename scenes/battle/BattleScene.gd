@@ -43,6 +43,12 @@ func _setup_highlighter() -> void:
 
 
 func _spawn_default_fleet() -> void:
+	if not GameManager.fleet_config.is_empty():
+		_spawn_from_config()
+		GameManager.fleet_config.clear()
+		return
+
+	# Hardcoded fallback when launched without going through FleetBuilder
 	var human_data := load(DEFAULT_HUMAN_SHIP_PATH) as ShipData
 	if human_data:
 		for i in 2:
@@ -52,6 +58,27 @@ func _spawn_default_fleet() -> void:
 	if ai_data:
 		for i in 2:
 			_spawn_ship(ai_data, "ai", Vector2i(17, 5 + i * 3), 3)
+
+
+func _spawn_from_config() -> void:
+	var human_idx := 0
+	var ai_idx := 0
+	for entry in GameManager.fleet_config:
+		var data := load(entry.get("res_path", "")) as ShipData
+		if data == null:
+			continue
+		var faction: String = entry.get("faction", "human")
+		var hex: Vector2i
+		var facing: int
+		if faction == "human":
+			hex = Vector2i(2, 5 + human_idx * 3)
+			facing = 0
+			human_idx += 1
+		else:
+			hex = Vector2i(17, 5 + ai_idx * 3)
+			facing = 3
+			ai_idx += 1
+		_spawn_ship(data, faction, hex, facing)
 
 
 func _spawn_ship(data: ShipData, faction: String, hex: Vector2i, initial_facing: int) -> Node:

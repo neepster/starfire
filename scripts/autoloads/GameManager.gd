@@ -6,6 +6,10 @@ var ai_fleet: Array[Node] = []
 var current_scenario: Resource = null
 var battle_active: bool = false
 
+## Set by FleetBuilder before loading BattleScene. Each entry: {res_path, faction}.
+## BattleScene reads this, uses it if non-empty, then clears it.
+var fleet_config: Array[Dictionary] = []
+
 ## Accumulates per-ship records as ships are destroyed during the battle.
 var _battle_records: Array[Dictionary] = []
 
