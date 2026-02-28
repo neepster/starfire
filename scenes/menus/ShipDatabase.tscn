@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://shipdatabase01"]
+
+[ext_resource type="Script" path="res://scenes/menus/ShipDatabase.gd" id="1_script"]
+
+[node name="ShipDatabase" type="CanvasLayer"]
+script = ExtResource("1_script")

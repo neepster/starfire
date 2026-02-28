@@ -13,13 +13,23 @@ class_name ShipClassParser
 extends RefCounted
 
 ## Parse a Starfire ship class string and return a populated ShipData.
-## The caller should set sprite_path and description afterward.
 static func parse(input: String) -> ShipData:
 	var data := ShipData.new()
 	_extract_header(input, data)
 	_extract_drive(input, data)
 	_extract_boxes(input, data)
+	data.sprite_path = _guess_sprite(data.ship_class)
 	return data
+
+
+## Infer sprite path from class code (e.g. "DD" → "dd_blue.png").
+## Falls back to placeholder if no matching image exists.
+static func _guess_sprite(ship_class: String) -> String:
+	var code := ship_class.to_lower()
+	var path := "res://assets/ship_images/%s_blue.png" % code
+	if ResourceLoader.exists(path):
+		return path
+	return "res://assets/ships/placeholder.png"
 
 
 static func _extract_header(s: String, data: ShipData) -> void:

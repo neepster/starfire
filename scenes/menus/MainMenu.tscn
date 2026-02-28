@@ -49,6 +49,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(320, 60)
 text = "New Game"
 
+[node name="BtnShipDatabase" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(320, 60)
+text = "Ship Database"
+
 [node name="BtnQuit" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 custom_minimum_size = Vector2(320, 60)
