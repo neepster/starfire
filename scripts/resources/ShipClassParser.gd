@@ -89,12 +89,27 @@ static func _extract_boxes(s: String, data: ShipData) -> void:
 			if box.begins_with("W"):
 				weapon_index += 1
 
-	data.system_boxes = PackedStringArray(boxes)
+	# Re-sort into canonical Starfire damage order: S → A → H → D → W*
+	# The raw box string may scatter shields (e.g. group notation like "(BbS)x2")
+	# so we collect them all then place them at the front where they belong.
+	var sorted_boxes: Array[String] = []
+	for b in boxes:
+		if b == "S": sorted_boxes.append(b)
+	for b in boxes:
+		if b == "A": sorted_boxes.append(b)
+	for b in boxes:
+		if b == "H": sorted_boxes.append(b)
+	for b in boxes:
+		if b == "D": sorted_boxes.append(b)
+	for b in boxes:
+		if b.begins_with("W"): sorted_boxes.append(b)
+
+	data.system_boxes = PackedStringArray(sorted_boxes)
 	data.weapons = weapons
 
 	# Derive hull_points from H-box count
 	var h_count := 0
-	for b in boxes:
+	for b in sorted_boxes:
 		if b == "H":
 			h_count += 1
 	data.hull_points = maxi(h_count, 1)
