@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_tx8yk"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_ujhor"]
+
+[sub_resource type="Resource" id="Resource_6gfp0"]
+script = ExtResource("2_ujhor")
+weapon_name = "R"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_ssjs5"]
+script = ExtResource("2_ujhor")
+weapon_name = "G"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_fhrjj"]
+script = ExtResource("2_ujhor")
+weapon_name = "M"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_nlajq"]
+script = ExtResource("2_ujhor")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_4ibny"]
+script = ExtResource("2_ujhor")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_nabbi"]
+script = ExtResource("2_ujhor")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_h47sy"]
+script = ExtResource("2_ujhor")
+weapon_name = "M2"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_q0wet"]
+script = ExtResource("2_ujhor")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_38gbf"]
+script = ExtResource("2_ujhor")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_a4ctt"]
+script = ExtResource("2_ujhor")
+weapon_name = "Lh"
+damage = 3
+
+[resource]
+script = ExtResource("1_tx8yk")
+ship_name = "Porghoz SD"
+ship_class = "SD"
+hull_points = 24
+drive_rating = 5
+weapons = Array[Resource]([SubResource("Resource_6gfp0"), SubResource("Resource_ssjs5"), SubResource("Resource_fhrjj"), SubResource("Resource_nlajq"), SubResource("Resource_4ibny"), SubResource("Resource_nabbi"), SubResource("Resource_h47sy"), SubResource("Resource_q0wet"), SubResource("Resource_38gbf"), SubResource("Resource_a4ctt")])
+sprite_path = "res://assets/ship_images/sd_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9")

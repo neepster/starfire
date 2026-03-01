@@ -1,0 +1,39 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_3grdu"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_rhgcp"]
+
+[sub_resource type="Resource" id="Resource_ida0s"]
+script = ExtResource("2_rhgcp")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_6kaav"]
+script = ExtResource("2_rhgcp")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_d6uyy"]
+script = ExtResource("2_rhgcp")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_75d8m"]
+script = ExtResource("2_rhgcp")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_lg4wp"]
+script = ExtResource("2_rhgcp")
+weapon_name = "Lh"
+damage = 3
+
+[resource]
+script = ExtResource("1_3grdu")
+ship_name = "Jolochoi BB"
+ship_class = "BB"
+hull_points = 20
+drive_rating = 5
+weapons = Array[Resource]([SubResource("Resource_ida0s"), SubResource("Resource_6kaav"), SubResource("Resource_d6uyy"), SubResource("Resource_75d8m"), SubResource("Resource_lg4wp")])
+sprite_path = "res://assets/ship_images/bb_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4")

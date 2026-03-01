@@ -23,6 +23,8 @@ var _remove_human_btn: Button
 var _remove_ai_btn: Button
 var _start_btn: Button
 var _status_lbl: Label
+var _cols_spin: SpinBox
+var _rows_spin: SpinBox
 
 
 func _ready() -> void:
@@ -70,10 +72,42 @@ func _build_ui() -> void:
 	_start_btn.pressed.connect(_on_start_pressed)
 	title_bar.add_child(_start_btn)
 
+	# ── Map settings bar ─────────────────────────────────────────────────────
+	var settings_bar := HBoxContainer.new()
+	settings_bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	settings_bar.offset_top = 56
+	settings_bar.custom_minimum_size = Vector2(0, 40)
+	settings_bar.add_theme_constant_override("separation", 8)
+	root.add_child(settings_bar)
+
+	var map_lbl := Label.new()
+	map_lbl.text = "  Map Size:"
+	settings_bar.add_child(map_lbl)
+
+	_cols_spin = SpinBox.new()
+	_cols_spin.min_value = 10
+	_cols_spin.max_value = 100
+	_cols_spin.value = GameManager.map_cols
+	_cols_spin.suffix = "cols"
+	_cols_spin.custom_minimum_size = Vector2(110, 0)
+	settings_bar.add_child(_cols_spin)
+
+	var x_lbl := Label.new()
+	x_lbl.text = "×"
+	settings_bar.add_child(x_lbl)
+
+	_rows_spin = SpinBox.new()
+	_rows_spin.min_value = 8
+	_rows_spin.max_value = 100
+	_rows_spin.value = GameManager.map_rows
+	_rows_spin.suffix = "rows"
+	_rows_spin.custom_minimum_size = Vector2(110, 0)
+	settings_bar.add_child(_rows_spin)
+
 	# ── Three-column body ────────────────────────────────────────────────────
 	var body := HBoxContainer.new()
 	body.set_anchors_preset(Control.PRESET_FULL_RECT)
-	body.offset_top = 56
+	body.offset_top = 100
 	body.add_theme_constant_override("separation", 8)
 	root.add_child(body)
 
@@ -90,6 +124,7 @@ func _build_ui() -> void:
 
 	_db_list = ItemList.new()
 	_db_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_db_list.allow_reselect = true
 	_db_list.item_selected.connect(_on_db_selected)
 	left.add_child(_db_list)
 
@@ -206,6 +241,11 @@ func _load_db_list() -> void:
 			_db_paths.append(path)
 			_db_list.add_item("%s  [%s]" % [data.ship_name, data.ship_class])
 
+	# Pre-select the first entry so the +Human / +AI buttons are enabled immediately
+	if _db_list.item_count > 0:
+		_db_list.select(0)
+		_on_db_selected(0)
+
 
 func _prepopulate_defaults() -> void:
 	# Start with a sensible default fleet so users can jump straight to battle
@@ -314,6 +354,8 @@ func _update_start_button() -> void:
 
 
 func _on_start_pressed() -> void:
+	GameManager.map_cols = int(_cols_spin.value)
+	GameManager.map_rows = int(_rows_spin.value)
 	GameManager.fleet_config.clear()
 	for path in _human_fleet:
 		GameManager.fleet_config.append({"res_path": path, "faction": "human"})

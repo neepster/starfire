@@ -16,8 +16,20 @@ var current_hull: int = 0
 var destroyed_box_count: int = 0    # system boxes crossed off from left (Starfire model)
 var moves_remaining: int = 0        # drive points left this turn
 var has_moved: bool = false
-var has_fired: bool = false
+var _weapon_ready: Array[bool] = [] # per-weapon "not yet fired this turn" flag
 var _is_selected: bool = false
+var _is_destroyed: bool = false     # guard against double-destruction
+
+## True only when every non-destroyed weapon has been assigned a target this turn.
+## Ships with no weapons are considered done.
+var has_fired: bool:
+	get:
+		if ship_data == null:
+			return true
+		for i in _weapon_ready.size():
+			if _weapon_ready[i] and not _is_weapon_destroyed(i):
+				return false   # at least one weapon still ready
+		return true
 
 @onready var pivot: Node2D = $Pivot
 @onready var ship_sprite: Sprite2D = $Pivot/ShipSprite
@@ -41,6 +53,10 @@ func initialize(data: ShipData, ship_faction: String, start_hex: Vector2i, start
 	hex_position = start_hex
 	facing = start_facing
 	destroyed_box_count = 0
+
+	_weapon_ready.clear()
+	for _i in data.weapons.size():
+		_weapon_ready.append(true)
 
 	# Set hull from system boxes (if defined) or hull_points fallback
 	if data.system_boxes.size() > 0:
@@ -93,6 +109,8 @@ func rotate_facing(steps: int) -> bool:
 
 
 func take_damage(amount: int) -> void:
+	if _is_destroyed:
+		return
 	if ship_data != null and ship_data.system_boxes.size() > 0:
 		# Starfire system box model: cross off boxes left-to-right
 		destroyed_box_count = mini(destroyed_box_count + amount, ship_data.system_boxes.size())
@@ -120,14 +138,44 @@ func _flash_damage() -> void:
 func fire_at(target: Node) -> void:
 	if ship_data == null or has_fired:
 		return
+	var target_ship := target as Ship
 	for i in ship_data.weapons.size():
 		var weapon := ship_data.weapons[i] as WeaponData
-		if weapon == null:
+		if weapon == null or _is_weapon_destroyed(i) or not _weapon_ready[i]:
 			continue
-		if _is_weapon_destroyed(i):
-			continue
-		CombatResolver.resolve_attack(self, target, weapon)
-	has_fired = true
+		if GameManager.combat_slow:
+			# Stop if the target was killed by an earlier shot in this salvo
+			if not is_instance_valid(target) or (target_ship != null and target_ship._is_destroyed):
+				break
+			_weapon_ready[i] = false   # mark assigned before the await
+			var proj := _make_projectile(weapon, target)
+			await proj.arrived
+			if is_instance_valid(target):
+				CombatResolver.resolve_attack(self, target, weapon)
+		else:
+			_weapon_ready[i] = false   # mark assigned
+			CombatResolver.resolve_attack(self, target, weapon)
+
+
+func _make_projectile(weapon: WeaponData, target: Node) -> Projectile:
+	var proj := Projectile.new()
+	get_parent().add_child(proj)
+	var target_ship := target as Ship
+	var to_pos := target_ship.global_position if target_ship != null else global_position
+	var is_missile := weapon.weapon_name.begins_with("M")
+	var speed := 250.0 if is_missile else 700.0
+	var color: Color
+	if is_missile:
+		color = Color(1.0, 0.55, 0.0)          # orange missile
+	elif weapon.weapon_name.begins_with("L"):
+		color = Color(0.2, 1.0, 1.0)            # cyan laser
+	elif weapon.weapon_name.begins_with("R"):
+		color = Color(1.0, 0.2, 0.2)            # red railgun
+	else:
+		color = Color(1.0, 1.0, 0.2)            # yellow energy
+	var radius := 5.0 if is_missile else 3.0
+	proj.launch(global_position, to_pos, speed, color, radius, is_missile)
+	return proj
 
 
 func set_selected(selected: bool) -> void:
@@ -137,7 +185,7 @@ func set_selected(selected: bool) -> void:
 
 func reset_for_new_turn() -> void:
 	has_moved = false
-	has_fired = false
+	_weapon_ready.fill(true)
 	moves_remaining = _calc_drive()
 
 
@@ -193,6 +241,9 @@ func _on_area_input_event(_viewport, event: InputEvent, _shape_idx: int) -> void
 
 
 func _on_destroyed() -> void:
+	if _is_destroyed:
+		return
+	_is_destroyed = true
 	GameManager.record_ship_destroyed(self)  # capture stats before node is freed
 	GameManager.unregister_ship(self)
 	EventBus.ship_destroyed.emit(self)

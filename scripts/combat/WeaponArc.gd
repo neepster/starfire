@@ -22,10 +22,14 @@ static func _half_width(arc_type: WeaponData.ArcType) -> float:
 
 ## Offset of arc center from ship's forward direction, in degrees.
 ##   Positive = counter-clockwise (port / left side).
+##
+## In a flat-top hex grid the perpendicular port/starboard face is 120° from the
+## bow face (not 90°), because each hex face spans exactly 60° and the three
+## forward faces (bow ±1) already consume 120° either side of the bow direction.
 static func _center_offset(arc_type: WeaponData.ArcType) -> float:
 	match arc_type:
-		WeaponData.ArcType.BROADSIDE_LEFT:  return  90.0   # port
-		WeaponData.ArcType.BROADSIDE_RIGHT: return -90.0   # starboard
+		WeaponData.ArcType.BROADSIDE_LEFT:  return  120.0  # port  (3 port hexes)
+		WeaponData.ArcType.BROADSIDE_RIGHT: return -120.0  # starboard (3 starboard hexes)
 		WeaponData.ArcType.AFT:             return  180.0  # aft
 		_:                                  return  0.0    # FORWARD / FORWARD_WIDE / ALL_ROUND
 
@@ -51,8 +55,10 @@ static func get_arc_hexes(
 		return in_arc
 
 	# Compute arc center angle in world space.
-	# facing=0 → East=0°, each facing step = 60° CCW (matches visual sprite rotation).
-	var forward_deg := float(facing) * 60.0
+	# In flat-top "odd-q" offset coords the East neighbor sits at 330° in math
+	# angles (atan2 convention), not 0°, because of the half-row stagger.
+	# Each facing step is still 60° CCW, so the formula is facing*60 - 30.
+	var forward_deg := float(facing) * 60.0 - 30.0
 	var arc_center  := fmod(forward_deg + _center_offset(arc_type) + 720.0, 360.0)
 	var half_w      := _half_width(arc_type)
 

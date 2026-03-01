@@ -36,6 +36,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(140, 40)
 text = "Import Ship"
 
+[node name="BtnCombatSpeed" type="Button" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 40)
+text = "Combat: Fast"
+
 [node name="BtnEndTurn" type="Button" parent="TopBar/HBoxContainer"]
 layout_mode = 2
 custom_minimum_size = Vector2(140, 40)

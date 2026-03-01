@@ -1,114 +1,54 @@
-[gd_resource type="Resource" script_class="ShipData" load_steps=23 format=3]
+[gd_resource type="Resource" script_class="ShipData" load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_if3l0"]
 [ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_f0xvf"]
 
-[sub_resource type="Resource" id="Resource_ccush"]
+[sub_resource type="Resource" id="Resource_if3l0"]
 script = ExtResource("2_f0xvf")
 weapon_name = "R"
 damage = 3
 
-[sub_resource type="Resource" id="Resource_upuqt"]
-script = ExtResource("2_f0xvf")
-weapon_name = "M"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_rnx2i"]
+[sub_resource type="Resource" id="Resource_f0xvf"]
 script = ExtResource("2_f0xvf")
 weapon_name = "L"
 damage = 3
 
-[sub_resource type="Resource" id="Resource_05rbq"]
-script = ExtResource("2_f0xvf")
-weapon_name = "L"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_uvmrw"]
-script = ExtResource("2_f0xvf")
-weapon_name = "M"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_moryb"]
-script = ExtResource("2_f0xvf")
-weapon_name = "L"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_fg1ax"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Rc"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_5nf0o"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Fc"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_ht337"]
-script = ExtResource("2_f0xvf")
-weapon_name = "M2"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_n8jkg"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Fc"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_ig0nq"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Rc"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_hotq5"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Rc"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_pgnbo"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Fc"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_4ni4b"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Fc"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_3o0ap"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Rc"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_mn15a"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Mg"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_l4453"]
-script = ExtResource("2_f0xvf")
-weapon_name = "Mg"
-damage = 3
-
-[sub_resource type="Resource" id="Resource_2b5qt"]
+[sub_resource type="Resource" id="Resource_ccush"]
 script = ExtResource("2_f0xvf")
 weapon_name = "Lh"
 damage = 3
 
-[sub_resource type="Resource" id="Resource_mrvqp"]
+[sub_resource type="Resource" id="Resource_upuqt"]
 script = ExtResource("2_f0xvf")
-weapon_name = "Fc"
+weapon_name = "Mg"
 damage = 3
 
-[sub_resource type="Resource" id="Resource_8pu76"]
+[sub_resource type="Resource" id="Resource_rnx2i"]
 script = ExtResource("2_f0xvf")
-weapon_name = "Fc"
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_05rbq"]
+script = ExtResource("2_f0xvf")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_uvmrw"]
+script = ExtResource("2_f0xvf")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_moryb"]
+script = ExtResource("2_f0xvf")
+weapon_name = "Lh"
 damage = 3
 
 [resource]
 script = ExtResource("1_if3l0")
-ship_name = "SD"
+ship_name = "Ypres SD"
 ship_class = "SD"
-hull_points = 23
-drive_rating = 5
-weapons = Array[Resource]([SubResource("Resource_ccush"), SubResource("Resource_upuqt"), SubResource("Resource_rnx2i"), SubResource("Resource_05rbq"), SubResource("Resource_uvmrw"), SubResource("Resource_moryb"), SubResource("Resource_fg1ax"), SubResource("Resource_5nf0o"), SubResource("Resource_ht337"), SubResource("Resource_n8jkg"), SubResource("Resource_ig0nq"), SubResource("Resource_hotq5"), SubResource("Resource_pgnbo"), SubResource("Resource_4ni4b"), SubResource("Resource_3o0ap"), SubResource("Resource_mn15a"), SubResource("Resource_l4453"), SubResource("Resource_2b5qt"), SubResource("Resource_mrvqp"), SubResource("Resource_8pu76")])
+hull_points = 3
+drive_rating = 1
+weapons = Array[Resource]([SubResource("Resource_if3l0"), SubResource("Resource_f0xvf"), SubResource("Resource_ccush"), SubResource("Resource_upuqt"), SubResource("Resource_rnx2i"), SubResource("Resource_05rbq"), SubResource("Resource_uvmrw"), SubResource("Resource_moryb")])
 sprite_path = "res://assets/ship_images/sd_blue.png"
-system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12", "W13", "W14", "W15", "W16", "W17", "W18", "W19")
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "H", "H", "H", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7")

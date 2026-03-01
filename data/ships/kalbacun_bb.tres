@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_xmgqi"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_ywxqa"]
+
+[sub_resource type="Resource" id="Resource_4cuxk"]
+script = ExtResource("2_ywxqa")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_8xe4w"]
+script = ExtResource("2_ywxqa")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_ik8rg"]
+script = ExtResource("2_ywxqa")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_p8y18"]
+script = ExtResource("2_ywxqa")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_jemo8"]
+script = ExtResource("2_ywxqa")
+weapon_name = "M2"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_jxu35"]
+script = ExtResource("2_ywxqa")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_yav2v"]
+script = ExtResource("2_ywxqa")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_prhmc"]
+script = ExtResource("2_ywxqa")
+weapon_name = "Lh"
+damage = 3
+
+[resource]
+script = ExtResource("1_xmgqi")
+ship_name = "Kalbacun BB"
+ship_class = "BB"
+hull_points = 18
+drive_rating = 5
+weapons = Array[Resource]([SubResource("Resource_4cuxk"), SubResource("Resource_8xe4w"), SubResource("Resource_ik8rg"), SubResource("Resource_p8y18"), SubResource("Resource_jemo8"), SubResource("Resource_jxu35"), SubResource("Resource_yav2v"), SubResource("Resource_prhmc")])
+sprite_path = "res://assets/ship_images/bb_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7")

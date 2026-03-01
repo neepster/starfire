@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_48p0e"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_hlmds"]
+
+[sub_resource type="Resource" id="Resource_uv64e"]
+script = ExtResource("2_hlmds")
+weapon_name = "R"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_ejst8"]
+script = ExtResource("2_hlmds")
+weapon_name = "R"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_hvwpf"]
+script = ExtResource("2_hlmds")
+weapon_name = "M"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_chirp"]
+script = ExtResource("2_hlmds")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_h3ns0"]
+script = ExtResource("2_hlmds")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_f47te"]
+script = ExtResource("2_hlmds")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_cfloh"]
+script = ExtResource("2_hlmds")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_r5lm6"]
+script = ExtResource("2_hlmds")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_bbccb"]
+script = ExtResource("2_hlmds")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_j4ygh"]
+script = ExtResource("2_hlmds")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_1rytf"]
+script = ExtResource("2_hlmds")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_ot1cj"]
+script = ExtResource("2_hlmds")
+weapon_name = "Lh"
+damage = 3
+
+[resource]
+script = ExtResource("1_48p0e")
+ship_name = "Kruzakor SD"
+ship_class = "SD"
+hull_points = 23
+drive_rating = 5
+weapons = Array[Resource]([SubResource("Resource_uv64e"), SubResource("Resource_ejst8"), SubResource("Resource_hvwpf"), SubResource("Resource_chirp"), SubResource("Resource_h3ns0"), SubResource("Resource_f47te"), SubResource("Resource_cfloh"), SubResource("Resource_r5lm6"), SubResource("Resource_bbccb"), SubResource("Resource_j4ygh"), SubResource("Resource_1rytf"), SubResource("Resource_ot1cj")])
+sprite_path = "res://assets/ship_images/sd_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11")

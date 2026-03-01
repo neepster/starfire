@@ -207,7 +207,7 @@ static func _map_token(tok: String, w_idx: int, weapons: Array[Resource]) -> Str
 		wd.weapon_name = tok
 		wd.damage = 3
 		wd.range_hexes = 6
-		wd.arc = 0
+		wd.arc = WeaponData.ArcType.ALL_ROUND
 		wd.shots_per_turn = 1
 		weapons.append(wd)
 		return "W%d" % w_idx

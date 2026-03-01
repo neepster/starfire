@@ -1,0 +1,84 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=17 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_sbxi7"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_j71or"]
+
+[sub_resource type="Resource" id="Resource_h53jq"]
+script = ExtResource("2_j71or")
+weapon_name = "G"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_qra7u"]
+script = ExtResource("2_j71or")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_sn3e8"]
+script = ExtResource("2_j71or")
+weapon_name = "M"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_ikesa"]
+script = ExtResource("2_j71or")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_a6upo"]
+script = ExtResource("2_j71or")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_lv565"]
+script = ExtResource("2_j71or")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_jxvqr"]
+script = ExtResource("2_j71or")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_75l66"]
+script = ExtResource("2_j71or")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_ygql4"]
+script = ExtResource("2_j71or")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_gnmnu"]
+script = ExtResource("2_j71or")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_ll1xx"]
+script = ExtResource("2_j71or")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_jquw6"]
+script = ExtResource("2_j71or")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_s22qg"]
+script = ExtResource("2_j71or")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_4ex7o"]
+script = ExtResource("2_j71or")
+weapon_name = "Lh"
+damage = 3
+
+[resource]
+script = ExtResource("1_sbxi7")
+ship_name = "KingLouis BC"
+ship_class = "BC"
+hull_points = 20
+drive_rating = 6
+weapons = Array[Resource]([SubResource("Resource_h53jq"), SubResource("Resource_qra7u"), SubResource("Resource_sn3e8"), SubResource("Resource_ikesa"), SubResource("Resource_a6upo"), SubResource("Resource_lv565"), SubResource("Resource_jxvqr"), SubResource("Resource_75l66"), SubResource("Resource_ygql4"), SubResource("Resource_gnmnu"), SubResource("Resource_ll1xx"), SubResource("Resource_jquw6"), SubResource("Resource_s22qg"), SubResource("Resource_4ex7o")])
+sprite_path = "res://assets/ship_images/bc_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12", "W13")

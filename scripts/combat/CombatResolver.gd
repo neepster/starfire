@@ -30,8 +30,8 @@ static func resolve_attack(attacker: Node, target: Node, weapon: WeaponData) -> 
 	if roll <= effective_damage:
 		if target_ship:
 			target_ship.take_damage(1)
-		EventBus.weapon_fired.emit(attacker_name, target_name, weapon.weapon_name, true, 1)
+		EventBus.weapon_fired.emit(attacker_name, target_name, weapon.weapon_name, true, 1, roll, effective_damage)
 		return 1
 
-	EventBus.weapon_fired.emit(attacker_name, target_name, weapon.weapon_name, false, 0)
+	EventBus.weapon_fired.emit(attacker_name, target_name, weapon.weapon_name, false, 0, roll, effective_damage)
 	return 0

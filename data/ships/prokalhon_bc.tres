@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_6ieqj"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_mkua8"]
+
+[sub_resource type="Resource" id="Resource_3va0x"]
+script = ExtResource("2_mkua8")
+weapon_name = "R"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_k02ms"]
+script = ExtResource("2_mkua8")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_7kfus"]
+script = ExtResource("2_mkua8")
+weapon_name = "M"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_ewv08"]
+script = ExtResource("2_mkua8")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_fmjp1"]
+script = ExtResource("2_mkua8")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_sh7bb"]
+script = ExtResource("2_mkua8")
+weapon_name = "Fc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_sjf2d"]
+script = ExtResource("2_mkua8")
+weapon_name = "M2"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_ohwl0"]
+script = ExtResource("2_mkua8")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_wxafs"]
+script = ExtResource("2_mkua8")
+weapon_name = "Fc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_pqtsn"]
+script = ExtResource("2_mkua8")
+weapon_name = "Lh"
+damage = 3
+
+[resource]
+script = ExtResource("1_6ieqj")
+ship_name = "Prokalhon BC"
+ship_class = "BC"
+hull_points = 18
+drive_rating = 6
+weapons = Array[Resource]([SubResource("Resource_3va0x"), SubResource("Resource_k02ms"), SubResource("Resource_7kfus"), SubResource("Resource_ewv08"), SubResource("Resource_fmjp1"), SubResource("Resource_sh7bb"), SubResource("Resource_sjf2d"), SubResource("Resource_ohwl0"), SubResource("Resource_wxafs"), SubResource("Resource_pqtsn")])
+sprite_path = "res://assets/ship_images/bc_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9")

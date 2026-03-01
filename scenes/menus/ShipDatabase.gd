@@ -221,8 +221,11 @@ func _refresh_ship_list() -> void:
 	names.sort()
 
 	for name in names:
-		_ship_paths.append(DATA_DIR + name)
-		_list.add_item(name.replace(".tres", ""))
+		var path := DATA_DIR + name
+		_ship_paths.append(path)
+		var data := load(path) as ShipData
+		var display := data.ship_name if data else name.replace(".tres", "")
+		_list.add_item(display)
 
 
 # ── Signal handlers ──────────────────────────────────────────────────────────
@@ -333,8 +336,9 @@ func _on_save_pressed() -> void:
 	if sel >= 0 and sel < _sprite_codes.size():
 		_parsed_data.sprite_path = "%s%s_blue.png" % [SPRITE_DIR, _sprite_codes[sel]]
 
-	# Filename derived from class code (e.g. "SD" → "sd.tres")
-	var raw_name: String = _parsed_data.ship_class.to_lower()
+	# Filename derived from display name (e.g. "Cromwell SD" → "cromwell_sd.tres")
+	# Using ship_name (not ship_class) so two ships of the same class don't overwrite each other.
+	var raw_name: String = _parsed_data.ship_name.to_lower()
 	for ch in [" ", "/", "\\", ":", "*", "?", "\"", "<", ">", "|"]:
 		raw_name = raw_name.replace(ch, "_")
 	var save_path: String = "%s%s.tres" % [DATA_DIR, raw_name]

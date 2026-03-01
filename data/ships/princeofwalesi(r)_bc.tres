@@ -1,0 +1,89 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_257fy"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_3sk5e"]
+
+[sub_resource type="Resource" id="Resource_yklc0"]
+script = ExtResource("2_3sk5e")
+weapon_name = "R"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_xtpog"]
+script = ExtResource("2_3sk5e")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_lcne2"]
+script = ExtResource("2_3sk5e")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_81ugp"]
+script = ExtResource("2_3sk5e")
+weapon_name = "M"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_m6euh"]
+script = ExtResource("2_3sk5e")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_l7k5q"]
+script = ExtResource("2_3sk5e")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_cd4v6"]
+script = ExtResource("2_3sk5e")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_wbtje"]
+script = ExtResource("2_3sk5e")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_egla5"]
+script = ExtResource("2_3sk5e")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_6atrg"]
+script = ExtResource("2_3sk5e")
+weapon_name = "Rc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_uhqqg"]
+script = ExtResource("2_3sk5e")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_hc6on"]
+script = ExtResource("2_3sk5e")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_yipwp"]
+script = ExtResource("2_3sk5e")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_kitlc"]
+script = ExtResource("2_3sk5e")
+weapon_name = "Lh"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_xy87r"]
+script = ExtResource("2_3sk5e")
+weapon_name = "F"
+damage = 3
+
+[resource]
+script = ExtResource("1_257fy")
+ship_name = "PrinceofWalesI(r) BC"
+ship_class = "OF"
+hull_points = 20
+drive_rating = 6
+weapons = Array[Resource]([SubResource("Resource_yklc0"), SubResource("Resource_xtpog"), SubResource("Resource_lcne2"), SubResource("Resource_81ugp"), SubResource("Resource_m6euh"), SubResource("Resource_l7k5q"), SubResource("Resource_cd4v6"), SubResource("Resource_wbtje"), SubResource("Resource_egla5"), SubResource("Resource_6atrg"), SubResource("Resource_uhqqg"), SubResource("Resource_hc6on"), SubResource("Resource_yipwp"), SubResource("Resource_kitlc"), SubResource("Resource_xy87r")])
+sprite_path = "res://assets/ship_images/bc_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12", "W13", "W14")

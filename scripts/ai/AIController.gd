@@ -7,7 +7,7 @@ extends Node
 func take_turn() -> void:
 	_plan_movement()
 	_execute_movement()
-	_plan_fire()
+	await _plan_fire()
 	TurnManager.advance_phase()
 
 
@@ -19,15 +19,18 @@ func _plan_movement() -> void:
 		var target := _find_nearest_human_ship(ai_ship)
 		if target == null:
 			continue
-		var neighbors := HexGrid.offset_neighbors(ai_ship.hex_position)
-		var best_hex: Vector2i = ai_ship.hex_position
-		var best_dist: int = HexGrid.offset_distance(ai_ship.hex_position, target.hex_position)
-		for neighbor in neighbors:
-			var d: int = HexGrid.offset_distance(neighbor, target.hex_position)
-			if d < best_dist:
-				best_dist = d
-				best_hex = neighbor
-		if best_hex != ai_ship.hex_position:
+		# Move greedily toward the target one step at a time, using all available move points.
+		while ai_ship.moves_remaining > 0:
+			var neighbors := HexGrid.offset_neighbors(ai_ship.hex_position)
+			var best_hex: Vector2i = ai_ship.hex_position
+			var best_dist: int = HexGrid.offset_distance(ai_ship.hex_position, target.hex_position)
+			for neighbor in neighbors:
+				var d: int = HexGrid.offset_distance(neighbor, target.hex_position)
+				if d < best_dist:
+					best_dist = d
+					best_hex = neighbor
+			if best_hex == ai_ship.hex_position:
+				break  # No closer hex reachable — already optimal
 			ai_ship.move_to_hex(best_hex)
 
 
@@ -45,7 +48,7 @@ func _plan_fire() -> void:
 			continue
 		var dist: int = HexGrid.offset_distance(ai_ship.hex_position, target.hex_position)
 		if dist <= 6:
-			ai_ship.fire_at(target)
+			await ai_ship.fire_at(target)
 
 
 func _find_nearest_human_ship(from_ship: Ship) -> Ship:

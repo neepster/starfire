@@ -4,8 +4,8 @@ class_name HexMap
 extends Node2D
 
 const HEX_SIZE := 48.0           # Circumradius: center to vertex
-const MAP_COLS := 20
-const MAP_ROWS := 15
+var map_cols: int = 20
+var map_rows: int = 15
 
 # Hex colors
 const COLOR_TERRAIN     := Color(0.05, 0.05, 0.15, 1.0)   # deep space
@@ -27,6 +27,8 @@ var _hex_verts: PackedVector2Array
 
 
 func _ready() -> void:
+	map_cols = GameManager.map_cols
+	map_rows = GameManager.map_rows
 	_precompute_verts()
 	_generate_map()
 	EventBus.hex_clicked.connect(_on_hex_clicked)
@@ -41,15 +43,15 @@ func _precompute_verts() -> void:
 
 func _generate_map() -> void:
 	_passable.clear()
-	for col in MAP_COLS:
-		for row in MAP_ROWS:
+	for col in map_cols:
+		for row in map_rows:
 			_passable[Vector2i(col, row)] = true
 
 
 func _draw() -> void:
 	# 1. Draw terrain hexes
-	for col in MAP_COLS:
-		for row in MAP_ROWS:
+	for col in map_cols:
+		for row in map_rows:
 			var center := HexGrid.offset_to_world(Vector2i(col, row), HEX_SIZE)
 			_draw_hex(center, COLOR_TERRAIN, COLOR_GRID_LINE)
 
@@ -114,4 +116,4 @@ func get_passable_dict() -> Dictionary:
 
 
 func get_map_bounds() -> Rect2i:
-	return Rect2i(0, 0, MAP_COLS, MAP_ROWS)
+	return Rect2i(0, 0, map_cols, map_rows)

@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_i5x2g"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_5iw1m"]
+
+[sub_resource type="Resource" id="Resource_7uemw"]
+script = ExtResource("2_5iw1m")
+weapon_name = "R"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_1dq2g"]
+script = ExtResource("2_5iw1m")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_1yftu"]
+script = ExtResource("2_5iw1m")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_wci2g"]
+script = ExtResource("2_5iw1m")
+weapon_name = "M"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_rvt32"]
+script = ExtResource("2_5iw1m")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_kr8gr"]
+script = ExtResource("2_5iw1m")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_bh18d"]
+script = ExtResource("2_5iw1m")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_36uks"]
+script = ExtResource("2_5iw1m")
+weapon_name = "F"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_7je2k"]
+script = ExtResource("2_5iw1m")
+weapon_name = "Lh"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_c0nqv"]
+script = ExtResource("2_5iw1m")
+weapon_name = "F"
+damage = 3
+
+[resource]
+script = ExtResource("1_i5x2g")
+ship_name = "PrinceofWalesI BC"
+ship_class = "BC"
+hull_points = 20
+drive_rating = 6
+weapons = Array[Resource]([SubResource("Resource_7uemw"), SubResource("Resource_1dq2g"), SubResource("Resource_1yftu"), SubResource("Resource_wci2g"), SubResource("Resource_rvt32"), SubResource("Resource_kr8gr"), SubResource("Resource_bh18d"), SubResource("Resource_36uks"), SubResource("Resource_7je2k"), SubResource("Resource_c0nqv")])
+sprite_path = "res://assets/ship_images/bc_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9")

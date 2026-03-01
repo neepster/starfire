@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_qcpbd"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_cddas"]
+
+[sub_resource type="Resource" id="Resource_dfrqy"]
+script = ExtResource("2_cddas")
+weapon_name = "R"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_cneds"]
+script = ExtResource("2_cddas")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_qddi6"]
+script = ExtResource("2_cddas")
+weapon_name = "Lh"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_hra2l"]
+script = ExtResource("2_cddas")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_rtq47"]
+script = ExtResource("2_cddas")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_8ma6j"]
+script = ExtResource("2_cddas")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_4qehf"]
+script = ExtResource("2_cddas")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_vfko1"]
+script = ExtResource("2_cddas")
+weapon_name = "Lh"
+damage = 3
+
+[resource]
+script = ExtResource("1_qcpbd")
+ship_name = "Sharno SD"
+ship_class = "SD"
+hull_points = 4
+drive_rating = 1
+weapons = Array[Resource]([SubResource("Resource_dfrqy"), SubResource("Resource_cneds"), SubResource("Resource_qddi6"), SubResource("Resource_hra2l"), SubResource("Resource_rtq47"), SubResource("Resource_8ma6j"), SubResource("Resource_4qehf"), SubResource("Resource_vfko1")])
+sprite_path = "res://assets/ship_images/sd_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "H", "H", "H", "H", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7")

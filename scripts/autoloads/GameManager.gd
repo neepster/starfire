@@ -5,6 +5,9 @@ var human_fleet: Array[Node] = []
 var ai_fleet: Array[Node] = []
 var current_scenario: Resource = null
 var battle_active: bool = false
+var combat_slow: bool = true      ## true = show projectile animations
+var map_cols: int = 20            ## battle map width in hexes (set by FleetBuilder)
+var map_rows: int = 15            ## battle map height in hexes (set by FleetBuilder)
 
 ## Set by FleetBuilder before loading BattleScene. Each entry: {res_path, faction}.
 ## BattleScene reads this, uses it if non-empty, then clears it.

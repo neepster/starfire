@@ -1,0 +1,49 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_nocq6"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_urg7t"]
+
+[sub_resource type="Resource" id="Resource_qxccs"]
+script = ExtResource("2_urg7t")
+weapon_name = "M"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_xei3q"]
+script = ExtResource("2_urg7t")
+weapon_name = "L"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_e7yve"]
+script = ExtResource("2_urg7t")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_dfnvq"]
+script = ExtResource("2_urg7t")
+weapon_name = "Mg"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_8n6t1"]
+script = ExtResource("2_urg7t")
+weapon_name = "Fc"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_j5s4x"]
+script = ExtResource("2_urg7t")
+weapon_name = "Lh"
+damage = 3
+
+[sub_resource type="Resource" id="Resource_7k8it"]
+script = ExtResource("2_urg7t")
+weapon_name = "Fc"
+damage = 3
+
+[resource]
+script = ExtResource("1_nocq6")
+ship_name = "Chihuahua CA"
+ship_class = "CA"
+hull_points = 18
+drive_rating = 6
+weapons = Array[Resource]([SubResource("Resource_qxccs"), SubResource("Resource_xei3q"), SubResource("Resource_e7yve"), SubResource("Resource_dfnvq"), SubResource("Resource_8n6t1"), SubResource("Resource_j5s4x"), SubResource("Resource_7k8it")])
+sprite_path = "res://assets/ship_images/ca_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6")

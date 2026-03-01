@@ -13,7 +13,7 @@ signal hex_clicked(hex_coord: Vector2i)
 signal hex_hovered(hex_coord: Vector2i)
 
 # Combat signals
-signal weapon_fired(attacker_name: String, target_name: String, weapon_name: String, hit: bool, damage: int)
+signal weapon_fired(attacker_name: String, target_name: String, weapon_name: String, hit: bool, damage: int, roll: int, roll_needed: int)
 
 # Game flow signals
 signal turn_phase_changed(phase: int)   # TurnManager.Phase enum value
