@@ -1,10 +1,12 @@
 ## WeaponArc.gd — Firing arc geometry for flat-top hexes.
 ## Uses world-space angles so arcs align correctly with ship visual facing.
 ##
-## Facing convention (matches Ship._apply_facing):
-##   facing=0 → East (0°),  facing=1 → NE (60°),  facing=2 → NW (120°)
-##   facing=3 → West (180°), facing=4 → SW (240°), facing=5 → SE (300°)
-##   Angles increase counter-clockwise in screen space (standard math).
+## Facing convention — bow-hex world-space math angles (0°=East, CCW+):
+##   facing=0 → 330°  facing=1 → 30°   facing=2 → 90°
+##   facing=3 → 150°  facing=4 → 210°  facing=5 → 270°
+## These are the actual atan2(-y,x) angles to each cube-direction neighbor in the
+## flat-top odd-q grid.  forward_deg = facing*60 - 30 reproduces them exactly.
+## Ship._apply_facing uses -facing*60+120 so the sprite nose aligns with the bow hex.
 class_name WeaponArc
 extends RefCounted
 

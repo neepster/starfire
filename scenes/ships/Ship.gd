@@ -230,9 +230,11 @@ func _is_weapon_destroyed(idx: int) -> bool:
 
 
 func _apply_facing() -> void:
-	# Sprite front is at top of PNG (local -Y). Facing 0 = East (+X screen).
-	# Formula: rotate -60° per facing step, then +90° to offset sprite's natural up orientation.
-	pivot.rotation_degrees = -facing * 60.0 + 90.0
+	# Sprite front is at top of PNG (local -Y).
+	# In flat-top odd-q offset coords the East hex neighbor sits 30° below horizontal
+	# (at 330° math-angle), so the sprite needs +120° (not +90°) to align the bow
+	# with the actual hex the ship is facing. This matches WeaponArc's -30° correction.
+	pivot.rotation_degrees = -facing * 60.0 + 120.0
 
 
 func _on_area_input_event(_viewport, event: InputEvent, _shape_idx: int) -> void:
