@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_c5877"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_lsbas"]
+
+[sub_resource type="Resource" id="Resource_4qyxx"]
+script = ExtResource("2_lsbas")
+weapon_name = "R"
+damage = 3
+arc = 5
+
+[sub_resource type="Resource" id="Resource_oj8xi"]
+script = ExtResource("2_lsbas")
+weapon_name = "L"
+damage = 3
+arc = 5
+
+[sub_resource type="Resource" id="Resource_nhy2o"]
+script = ExtResource("2_lsbas")
+weapon_name = "M"
+damage = 3
+arc = 5
+
+[sub_resource type="Resource" id="Resource_3cnet"]
+script = ExtResource("2_lsbas")
+weapon_name = "L"
+damage = 3
+arc = 5
+
+[sub_resource type="Resource" id="Resource_68phx"]
+script = ExtResource("2_lsbas")
+weapon_name = "Mg"
+damage = 3
+arc = 5
+
+[sub_resource type="Resource" id="Resource_2jd4e"]
+script = ExtResource("2_lsbas")
+weapon_name = "M2"
+damage = 3
+arc = 5
+
+[sub_resource type="Resource" id="Resource_kchh3"]
+script = ExtResource("2_lsbas")
+weapon_name = "F"
+damage = 3
+arc = 5
+
+[sub_resource type="Resource" id="Resource_tyrpt"]
+script = ExtResource("2_lsbas")
+weapon_name = "Lh"
+damage = 3
+arc = 5
+
+[resource]
+script = ExtResource("1_c5877")
+ship_name = "Spruance CL"
+ship_class = "CL"
+hull_points = 11
+drive_rating = 6
+weapons = Array[Resource]([SubResource("Resource_4qyxx"), SubResource("Resource_oj8xi"), SubResource("Resource_nhy2o"), SubResource("Resource_3cnet"), SubResource("Resource_68phx"), SubResource("Resource_2jd4e"), SubResource("Resource_kchh3"), SubResource("Resource_tyrpt")])
+sprite_path = "res://assets/ship_images/cl_blue.png"
+system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7")

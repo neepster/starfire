@@ -14,10 +14,13 @@ var _sprite_codes: Array[String] = []    # e.g. ["bb", "bc", "ca", ...]
 var _list: ItemList
 var _detail_rtl: RichTextLabel
 var _delete_btn: Button
+var _edit_btn: Button
+var _edit_path: String = ""   # path of ship being edited; "" = new parse (not editing)
 var _paste_field: TextEdit
 var _preview_rtl: RichTextLabel
 var _name_field: LineEdit
 var _desc_field: LineEdit
+var _faction_option: OptionButton
 var _sprite_option: OptionButton
 var _save_btn: Button
 var _status_lbl: Label
@@ -101,6 +104,12 @@ func _build_ui() -> void:
 	_delete_btn.pressed.connect(_on_delete_pressed)
 	left.add_child(_delete_btn)
 
+	_edit_btn = Button.new()
+	_edit_btn.text = "Edit Selected Ship"
+	_edit_btn.disabled = true
+	_edit_btn.pressed.connect(_on_edit_pressed)
+	left.add_child(_edit_btn)
+
 	# ── Right panel: import / save ───────────────────────────────────────────
 	var right := VBoxContainer.new()
 	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -156,6 +165,19 @@ func _build_ui() -> void:
 	_desc_field.placeholder_text = "Optional flavour text"
 	desc_row.add_child(_desc_field)
 
+	# Faction picker
+	var faction_row := HBoxContainer.new()
+	right.add_child(faction_row)
+	var faction_lbl := Label.new()
+	faction_lbl.text = "Faction:"
+	faction_lbl.custom_minimum_size = Vector2(120, 0)
+	faction_row.add_child(faction_lbl)
+	_faction_option = OptionButton.new()
+	_faction_option.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	for f in ["TFN", "Ophiuchi", "KON", "Gorm", "Rigelian", "Arachnid"]:
+		_faction_option.add_item(f)
+	faction_row.add_child(_faction_option)
+
 	# Sprite picker
 	var sprite_row := HBoxContainer.new()
 	right.add_child(sprite_row)
@@ -203,6 +225,7 @@ func _refresh_ship_list() -> void:
 	_ship_paths.clear()
 	_selected_list_index = -1
 	_delete_btn.disabled = true
+	_edit_btn.disabled = true
 	_detail_rtl.text = ""
 	_list.clear()
 
@@ -233,6 +256,7 @@ func _refresh_ship_list() -> void:
 func _on_list_ship_selected(index: int) -> void:
 	_selected_list_index = index
 	_delete_btn.disabled = false
+	_edit_btn.disabled = false
 
 	var data := load(_ship_paths[index]) as ShipData
 	if data == null:
@@ -274,7 +298,40 @@ func _on_delete_pressed() -> void:
 		_status_lbl.text = "Delete failed (error %d)" % err
 
 
+func _on_edit_pressed() -> void:
+	if _selected_list_index < 0 or _selected_list_index >= _ship_paths.size():
+		return
+	var path := _ship_paths[_selected_list_index]
+	var data := load(path) as ShipData
+	if data == null:
+		_status_lbl.modulate = Color(1.0, 0.3, 0.3)
+		_status_lbl.text = "Failed to load ship for editing."
+		return
+
+	_parsed_data = data
+	_edit_path = path
+
+	_show_preview(data)
+	_name_field.text = data.ship_name
+	_desc_field.text  = data.description
+
+	const FACTION_IDS := ["TFN", "Ophiuchi", "KON", "Gorm", "Rigelian", "Arachnid"]
+	var fi := FACTION_IDS.find(data.faction_id)
+	_faction_option.selected = fi if fi >= 0 else 0
+
+	var guessed := data.ship_class.to_lower()
+	for i in _sprite_codes.size():
+		if _sprite_codes[i] == guessed:
+			_sprite_option.selected = i
+			break
+
+	_save_btn.disabled = false
+	_status_lbl.modulate = Color(1.0, 1.0, 1.0)
+	_status_lbl.text = "Editing: %s — change fields then click Save." % data.ship_name
+
+
 func _on_parse_pressed() -> void:
+	_edit_path = ""
 	var input: String = _paste_field.text.strip_edges()
 	if input.is_empty():
 		_preview_rtl.text = "[color=red]Paste a ship class string above first.[/color]"
@@ -286,6 +343,11 @@ func _on_parse_pressed() -> void:
 	# Pre-fill editable fields — ship_name is now "Cromwell SD", ship_class is "SD"
 	_name_field.text = _parsed_data.ship_name
 	_desc_field.text  = _parsed_data.description
+
+	# Pre-select faction
+	const FACTION_IDS := ["TFN", "Ophiuchi", "KON", "Gorm", "Rigelian", "Arachnid"]
+	var fi := FACTION_IDS.find(_parsed_data.faction_id)
+	_faction_option.selected = fi if fi >= 0 else 0
 
 	# Pre-select matching sprite from class code
 	var guessed := _parsed_data.ship_class.to_lower()
@@ -331,6 +393,10 @@ func _on_save_pressed() -> void:
 
 	_parsed_data.description = _desc_field.text.strip_edges()
 
+	# Apply selected faction
+	const FACTION_IDS := ["TFN", "Ophiuchi", "KON", "Gorm", "Rigelian", "Arachnid"]
+	_parsed_data.faction_id = FACTION_IDS[_faction_option.selected]
+
 	# Apply selected sprite
 	var sel := _sprite_option.selected
 	if sel >= 0 and sel < _sprite_codes.size():
@@ -342,6 +408,12 @@ func _on_save_pressed() -> void:
 	for ch in [" ", "/", "\\", ":", "*", "?", "\"", "<", ">", "|"]:
 		raw_name = raw_name.replace(ch, "_")
 	var save_path: String = "%s%s.tres" % [DATA_DIR, raw_name]
+
+	if _edit_path != "" and _edit_path != save_path:
+		var old_dir := DirAccess.open(DATA_DIR)
+		if old_dir:
+			old_dir.remove(_edit_path.get_file())
+	_edit_path = ""
 
 	var err := ResourceSaver.save(_parsed_data, save_path)
 	if err == OK:

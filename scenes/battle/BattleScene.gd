@@ -99,7 +99,8 @@ func _spawn_fallback_hidden() -> void:
 func _spawn_ship(data: ShipData, faction: String, hex: Vector2i, initial_facing: int) -> Node:
 	var ship := SHIP_SCENE.instantiate() as Ship
 	ship_container.add_child(ship)
-	ship.ship_name = ShipNameGenerator.generate(faction)
+	var lore_faction := data.faction_id if not data.faction_id.is_empty() else "TFN"
+	ship.ship_name = ShipNameGenerator.generate_for_faction(lore_faction, data.ship_class)
 	ship.initialize(data, faction, hex, initial_facing)
 	GameManager.register_ship(ship, faction)
 	return ship
@@ -263,12 +264,12 @@ func _finish_placement() -> void:
 	# Show fleet sidebars now that all ships are placed
 	_fleet_panel = FleetStatusPanel.new()
 	$UI.add_child(_fleet_panel)
-	_fleet_panel.configure(false)   # human — left side, blue
+	_fleet_panel.configure(false, "%s FLEET" % GameManager.human_faction_id.to_upper())
 	_fleet_panel.populate(GameManager.human_fleet)
 
 	_enemy_panel = FleetStatusPanel.new()
 	$UI.add_child(_enemy_panel)
-	_enemy_panel.configure(true)    # enemy — right side, orange
+	_enemy_panel.configure(true, "%s FLEET" % GameManager.ai_faction_id.to_upper())
 	_enemy_panel.populate(GameManager.ai_fleet)
 
 	# Now start the first turn

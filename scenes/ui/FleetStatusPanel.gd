@@ -54,16 +54,17 @@ func _ready() -> void:
 ## Call this immediately after adding to the scene tree, before populate().
 ## is_enemy=false → left side, blue (human fleet).
 ## is_enemy=true  → right side, orange (enemy fleet).
-func configure(is_enemy: bool) -> void:
+## faction_label overrides the default "YOUR FLEET" / "ENEMY FLEET" title text.
+func configure(is_enemy: bool, faction_label: String = "") -> void:
 	if is_enemy:
-		_fleet_label = "ENEMY FLEET"
+		_fleet_label = faction_label if faction_label != "" else "ENEMY FLEET"
 		_title_color  = Color(1.0, 0.55, 0.35)
 		set_anchors_preset(Control.PRESET_TOP_RIGHT)
 		offset_top   = 64
 		offset_right = -6
 		offset_left  = offset_right - PANEL_WIDTH
 	else:
-		_fleet_label = "YOUR FLEET"
+		_fleet_label = faction_label if faction_label != "" else "YOUR FLEET"
 		_title_color  = Color(0.5, 0.85, 1.0)
 		set_anchors_preset(Control.PRESET_TOP_LEFT)
 		offset_top  = 64

@@ -25,6 +25,18 @@ var _start_btn: Button
 var _status_lbl: Label
 var _cols_spin: SpinBox
 var _rows_spin: SpinBox
+var _player_faction_opt: OptionButton
+var _enemy_faction_opt: OptionButton
+
+const FACTIONS := ["TFN", "Ophiuchi", "KON", "Gorm", "Rigelian", "Arachnid"]
+const FACTION_DEFAULTS := {
+	"TFN":      "Arachnid",
+	"Ophiuchi": "TFN",
+	"KON":      "TFN",
+	"Gorm":     "KON",
+	"Rigelian": "TFN",
+	"Arachnid": "TFN",
+}
 
 
 func _ready() -> void:
@@ -103,6 +115,32 @@ func _build_ui() -> void:
 	_rows_spin.suffix = "rows"
 	_rows_spin.custom_minimum_size = Vector2(110, 0)
 	settings_bar.add_child(_rows_spin)
+
+	settings_bar.add_child(VSeparator.new())
+
+	var player_faction_lbl := Label.new()
+	player_faction_lbl.text = "  Your Faction:"
+	settings_bar.add_child(player_faction_lbl)
+
+	_player_faction_opt = OptionButton.new()
+	_player_faction_opt.custom_minimum_size = Vector2(110, 0)
+	for f in FACTIONS:
+		_player_faction_opt.add_item(f)
+	_player_faction_opt.selected = FACTIONS.find(GameManager.human_faction_id)
+	_player_faction_opt.item_selected.connect(_on_player_faction_changed)
+	settings_bar.add_child(_player_faction_opt)
+
+	var enemy_faction_lbl := Label.new()
+	enemy_faction_lbl.text = "  vs:"
+	settings_bar.add_child(enemy_faction_lbl)
+
+	_enemy_faction_opt = OptionButton.new()
+	_enemy_faction_opt.custom_minimum_size = Vector2(110, 0)
+	for f in FACTIONS:
+		_enemy_faction_opt.add_item(f)
+	var default_enemy := FACTION_DEFAULTS.get(GameManager.human_faction_id, "Arachnid") as String
+	_enemy_faction_opt.selected = FACTIONS.find(default_enemy)
+	settings_bar.add_child(_enemy_faction_opt)
 
 	# ── Three-column body ────────────────────────────────────────────────────
 	var body := HBoxContainer.new()
@@ -356,12 +394,20 @@ func _update_start_button() -> void:
 func _on_start_pressed() -> void:
 	GameManager.map_cols = int(_cols_spin.value)
 	GameManager.map_rows = int(_rows_spin.value)
+	GameManager.human_faction_id = FACTIONS[_player_faction_opt.selected]
+	GameManager.ai_faction_id    = FACTIONS[_enemy_faction_opt.selected]
 	GameManager.fleet_config.clear()
 	for path in _human_fleet:
 		GameManager.fleet_config.append({"res_path": path, "faction": "human"})
 	for path in _ai_fleet:
 		GameManager.fleet_config.append({"res_path": path, "faction": "ai"})
 	SceneLoader.load_scene("res://scenes/battle/BattleScene.tscn")
+
+
+func _on_player_faction_changed(index: int) -> void:
+	var player_faction: String = FACTIONS[index]
+	var enemy_faction: String = FACTION_DEFAULTS.get(player_faction, "Arachnid") as String
+	_enemy_faction_opt.selected = FACTIONS.find(enemy_faction)
 
 
 func _on_back_pressed() -> void:

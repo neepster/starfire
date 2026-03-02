@@ -10,4 +10,5 @@ extends Resource
 @export var weapons: Array[Resource] = []      # Array of WeaponData
 @export var sprite_path: String = "res://assets/ships/placeholder.png"
 @export var description: String = ""          # flavour text for info panel
+@export var faction_id: String = "TFN"        # lore faction: TFN/Ophiuchi/KON/Gorm/Rigelian/Arachnid
 @export var system_boxes: PackedStringArray = []  # Ordered Starfire system boxes: "H","A","D","W0","W1"…

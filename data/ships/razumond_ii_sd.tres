@@ -81,4 +81,5 @@ hull_points = 25
 drive_rating = 5
 weapons = Array[Resource]([SubResource("Resource_7q5kq"), SubResource("Resource_41bs4"), SubResource("Resource_spoqb"), SubResource("Resource_keoge"), SubResource("Resource_rpt60"), SubResource("Resource_7ra3w"), SubResource("Resource_4gbqb"), SubResource("Resource_jjv2b"), SubResource("Resource_7issj"), SubResource("Resource_t830r"), SubResource("Resource_c6sr0"), SubResource("Resource_26nbs"), SubResource("Resource_gph2h"), SubResource("Resource_pvr4u")])
 sprite_path = "res://assets/ship_images/sd_blue.png"
+faction_id = "KON"
 system_boxes = PackedStringArray("S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "H", "D", "D", "D", "D", "D", "D", "D", "D", "W0", "W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9", "W10", "W11", "W12", "W13")
