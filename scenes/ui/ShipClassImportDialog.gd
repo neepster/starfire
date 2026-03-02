@@ -62,7 +62,10 @@ func _show_preview(data: ShipData) -> void:
 		for w in data.weapons:
 			var wd := w as WeaponData
 			if wd:
-				t += "    [color=orange]%s[/color] dmg %d rng %d\n" % [wd.weapon_name, wd.damage, wd.range_hexes]
+				t += "    [color=orange]%s[/color] dmg %d rng %d\n" % [
+					wd.weapon_name,
+					WeaponData.max_damage_for_name(wd.weapon_name),
+					WeaponData.max_range_for_name(wd.weapon_name)]
 	else:
 		t += "  [color=gray]No weapons detected[/color]\n"
 

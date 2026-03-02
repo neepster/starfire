@@ -1,32 +1,38 @@
 ## FleetBuilder.gd — Compose human and AI fleets from the ship database before battle.
+## Ship Database panel shows two side-by-side faction-filtered lists so players
+## pick ships appropriate to each side without wading through all factions.
 extends CanvasLayer
 
 const DATA_DIR := "res://data/ships/"
 const DEFAULT_HUMAN_PATH := "res://data/ships/escort_dd.tres"
 const DEFAULT_AI_PATH    := "res://data/ships/cruiser_ca.tres"
 
-# Parallel arrays for the available-ships list
-var _db_paths: Array[String] = []
+# Parallel arrays for each faction's ship list
+var _your_paths:  Array[String] = []   # ships matching player faction
+var _enemy_paths: Array[String] = []   # ships matching enemy faction
 
 # Fleet lists — each entry is a res_path string
 var _human_fleet: Array[String] = []
-var _ai_fleet: Array[String] = []
+var _ai_fleet:    Array[String] = []
 
 # UI refs
-var _db_list: ItemList
-var _preview_rtl: RichTextLabel
+var _your_list:     ItemList
+var _your_db_hdr:   Label
+var _enemy_db_list: ItemList
+var _enemy_db_hdr:  Label
+var _preview_rtl:   RichTextLabel
 var _add_human_btn: Button
-var _add_ai_btn: Button
-var _human_list: ItemList
-var _ai_list: ItemList
+var _add_ai_btn:    Button
+var _human_list:    ItemList
+var _ai_list:       ItemList
 var _remove_human_btn: Button
-var _remove_ai_btn: Button
-var _start_btn: Button
+var _remove_ai_btn:    Button
+var _start_btn:  Button
 var _status_lbl: Label
-var _cols_spin: SpinBox
-var _rows_spin: SpinBox
+var _cols_spin:  SpinBox
+var _rows_spin:  SpinBox
 var _player_faction_opt: OptionButton
-var _enemy_faction_opt: OptionButton
+var _enemy_faction_opt:  OptionButton
 
 const FACTIONS := ["TFN", "Ophiuchi", "KON", "Gorm", "Rigelian", "Arachnid"]
 const FACTION_DEFAULTS := {
@@ -41,7 +47,7 @@ const FACTION_DEFAULTS := {
 
 func _ready() -> void:
 	_build_ui()
-	_load_db_list()
+	_reload_db_lists()
 	_prepopulate_defaults()
 
 
@@ -84,7 +90,7 @@ func _build_ui() -> void:
 	_start_btn.pressed.connect(_on_start_pressed)
 	title_bar.add_child(_start_btn)
 
-	# ── Map settings bar ─────────────────────────────────────────────────────
+	# ── Map / faction settings bar ───────────────────────────────────────────
 	var settings_bar := HBoxContainer.new()
 	settings_bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	settings_bar.offset_top = 56
@@ -140,60 +146,86 @@ func _build_ui() -> void:
 		_enemy_faction_opt.add_item(f)
 	var default_enemy := FACTION_DEFAULTS.get(GameManager.human_faction_id, "Arachnid") as String
 	_enemy_faction_opt.selected = FACTIONS.find(default_enemy)
+	_enemy_faction_opt.item_selected.connect(func(_i: int) -> void: _reload_db_lists())
 	settings_bar.add_child(_enemy_faction_opt)
 
-	# ── Three-column body ────────────────────────────────────────────────────
+	# ── Body ─────────────────────────────────────────────────────────────────
 	var body := HBoxContainer.new()
 	body.set_anchors_preset(Control.PRESET_FULL_RECT)
 	body.offset_top = 100
 	body.add_theme_constant_override("separation", 8)
 	root.add_child(body)
 
-	# ── Left: available ships ────────────────────────────────────────────────
+	# ── Left: two faction-filtered ship lists ─────────────────────────────────
 	var left := VBoxContainer.new()
-	left.custom_minimum_size = Vector2(300, 0)
+	left.custom_minimum_size = Vector2(360, 0)
 	left.add_theme_constant_override("separation", 6)
 	body.add_child(left)
 
-	var db_hdr := Label.new()
-	db_hdr.text = "Ship Database"
-	db_hdr.add_theme_font_size_override("font_size", 16)
-	left.add_child(db_hdr)
+	# Two side-by-side sub-columns inside the left panel
+	var db_split := HBoxContainer.new()
+	db_split.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	db_split.add_theme_constant_override("separation", 6)
+	left.add_child(db_split)
 
-	_db_list = ItemList.new()
-	_db_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_db_list.allow_reselect = true
-	_db_list.item_selected.connect(_on_db_selected)
-	left.add_child(_db_list)
+	# ── Your Faction column ───────────────────────────────────────────────────
+	var your_col := VBoxContainer.new()
+	your_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	your_col.add_theme_constant_override("separation", 4)
+	db_split.add_child(your_col)
 
+	_your_db_hdr = Label.new()
+	_your_db_hdr.add_theme_font_size_override("font_size", 13)
+	_your_db_hdr.modulate = Color(0.5, 0.85, 1.0)
+	your_col.add_child(_your_db_hdr)
+
+	_your_list = ItemList.new()
+	_your_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_your_list.allow_reselect = true
+	_your_list.item_selected.connect(_on_your_selected)
+	your_col.add_child(_your_list)
+
+	_add_human_btn = Button.new()
+	_add_human_btn.text = "→ Your Fleet"
+	_add_human_btn.disabled = true
+	_add_human_btn.pressed.connect(_on_add_human_pressed)
+	your_col.add_child(_add_human_btn)
+
+	db_split.add_child(VSeparator.new())
+
+	# ── Enemy Faction column ──────────────────────────────────────────────────
+	var enemy_col := VBoxContainer.new()
+	enemy_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	enemy_col.add_theme_constant_override("separation", 4)
+	db_split.add_child(enemy_col)
+
+	_enemy_db_hdr = Label.new()
+	_enemy_db_hdr.add_theme_font_size_override("font_size", 13)
+	_enemy_db_hdr.modulate = Color(1.0, 0.55, 0.35)
+	enemy_col.add_child(_enemy_db_hdr)
+
+	_enemy_db_list = ItemList.new()
+	_enemy_db_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_enemy_db_list.allow_reselect = true
+	_enemy_db_list.item_selected.connect(_on_enemy_db_selected)
+	enemy_col.add_child(_enemy_db_list)
+
+	_add_ai_btn = Button.new()
+	_add_ai_btn.text = "→ AI Fleet"
+	_add_ai_btn.disabled = true
+	_add_ai_btn.pressed.connect(_on_add_ai_pressed)
+	enemy_col.add_child(_add_ai_btn)
+
+	# ── Shared preview ────────────────────────────────────────────────────────
 	_preview_rtl = RichTextLabel.new()
 	_preview_rtl.bbcode_enabled = true
 	_preview_rtl.fit_content = true
 	_preview_rtl.scroll_active = false
-	_preview_rtl.custom_minimum_size = Vector2(0, 120)
+	_preview_rtl.custom_minimum_size = Vector2(0, 110)
 	left.add_child(_preview_rtl)
 
-	var add_row := HBoxContainer.new()
-	add_row.add_theme_constant_override("separation", 6)
-	left.add_child(add_row)
-
-	_add_human_btn = Button.new()
-	_add_human_btn.text = "+ Human"
-	_add_human_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_add_human_btn.disabled = true
-	_add_human_btn.pressed.connect(_on_add_human_pressed)
-	add_row.add_child(_add_human_btn)
-
-	_add_ai_btn = Button.new()
-	_add_ai_btn.text = "+ AI"
-	_add_ai_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_add_ai_btn.disabled = true
-	_add_ai_btn.pressed.connect(_on_add_ai_pressed)
-	add_row.add_child(_add_ai_btn)
-
 	# ── Divider ──────────────────────────────────────────────────────────────
-	var div := VSeparator.new()
-	body.add_child(div)
+	body.add_child(VSeparator.new())
 
 	# ── Center: human fleet ──────────────────────────────────────────────────
 	var center := VBoxContainer.new()
@@ -202,7 +234,7 @@ func _build_ui() -> void:
 	body.add_child(center)
 
 	var human_hdr := Label.new()
-	human_hdr.text = "Human Fleet"
+	human_hdr.text = "Your Fleet"
 	human_hdr.add_theme_font_size_override("font_size", 16)
 	human_hdr.modulate = Color(0.5, 0.85, 1.0)
 	center.add_child(human_hdr)
@@ -219,8 +251,7 @@ func _build_ui() -> void:
 	center.add_child(_remove_human_btn)
 
 	# ── Divider ──────────────────────────────────────────────────────────────
-	var div2 := VSeparator.new()
-	body.add_child(div2)
+	body.add_child(VSeparator.new())
 
 	# ── Right: AI fleet ──────────────────────────────────────────────────────
 	var right := VBoxContainer.new()
@@ -254,9 +285,22 @@ func _build_ui() -> void:
 
 # ── Data ─────────────────────────────────────────────────────────────────────
 
-func _load_db_list() -> void:
-	_db_paths.clear()
-	_db_list.clear()
+## Reload both faction-filtered ship lists from the database directory.
+## Called on startup and whenever either faction dropdown changes.
+func _reload_db_lists() -> void:
+	_your_paths.clear()
+	_your_list.clear()
+	_enemy_paths.clear()
+	_enemy_db_list.clear()
+	_add_human_btn.disabled = true
+	_add_ai_btn.disabled = true
+	_preview_rtl.text = ""
+
+	var your_faction:  String = FACTIONS[_player_faction_opt.selected]
+	var enemy_faction: String = FACTIONS[_enemy_faction_opt.selected]
+
+	_your_db_hdr.text  = "%s Ships" % your_faction
+	_enemy_db_hdr.text = "%s Ships" % enemy_faction
 
 	var dir := DirAccess.open(DATA_DIR)
 	if not dir:
@@ -275,18 +319,25 @@ func _load_db_list() -> void:
 	for name in names:
 		var path := DATA_DIR + name
 		var data := load(path) as ShipData
-		if data:
-			_db_paths.append(path)
-			_db_list.add_item("%s  [%s]" % [data.ship_name, data.ship_class])
+		if data == null:
+			continue
+		var label := "%s  [%s]" % [data.ship_name, data.ship_class]
+		if data.faction_id == your_faction:
+			_your_paths.append(path)
+			_your_list.add_item(label)
+		elif data.faction_id == enemy_faction:
+			_enemy_paths.append(path)
+			_enemy_db_list.add_item(label)
 
-	# Pre-select the first entry so the +Human / +AI buttons are enabled immediately
-	if _db_list.item_count > 0:
-		_db_list.select(0)
-		_on_db_selected(0)
+	if _your_list.item_count > 0:
+		_your_list.select(0)
+		_on_your_selected(0)
+	if _enemy_db_list.item_count > 0:
+		_enemy_db_list.select(0)
+		_on_enemy_db_selected(0)
 
 
 func _prepopulate_defaults() -> void:
-	# Start with a sensible default fleet so users can jump straight to battle
 	_try_add_to_fleet(DEFAULT_HUMAN_PATH, "human")
 	_try_add_to_fleet(DEFAULT_HUMAN_PATH, "human")
 	_try_add_to_fleet(DEFAULT_AI_PATH, "ai")
@@ -294,30 +345,33 @@ func _prepopulate_defaults() -> void:
 	_update_start_button()
 
 
-func _try_add_to_fleet(path: String, faction: String) -> void:
+func _try_add_to_fleet(path: String, side: String) -> void:
 	var data := load(path) as ShipData
 	if data == null:
 		return
-	var label := data.ship_name
-	if faction == "human":
+	if side == "human":
 		_human_fleet.append(path)
-		_human_list.add_item(label)
+		_human_list.add_item(data.ship_name)
 	else:
 		_ai_fleet.append(path)
-		_ai_list.add_item(label)
+		_ai_list.add_item(data.ship_name)
 
 
-# ── Signal handlers ──────────────────────────────────────────────────────────
-
-func _on_db_selected(index: int) -> void:
-	var data := load(_db_paths[index]) as ShipData
+func _show_ship_preview(path: String) -> void:
+	var data := load(path) as ShipData
 	if data == null:
 		return
-
-	var t := "[b]%s[/b]  (class: %s)\n" % [data.ship_name, data.ship_class]
+	var t := "[b]%s[/b]  (class: %s)  [color=gray]%s[/color]\n" % [
+		data.ship_name, data.ship_class, data.faction_id]
 	t += "Drive: %d   Hull: %d   Weapons: %d\n" % [
-		data.drive_rating, data.hull_points, data.weapons.size()
-	]
+		data.drive_rating, data.hull_points, data.weapons.size()]
+	if data.weapons.size() > 0:
+		var wnames: Array[String] = []
+		for w in data.weapons:
+			var wd := w as WeaponData
+			if wd:
+				wnames.append(wd.weapon_name)
+		t += "[color=orange]%s[/color]\n" % ", ".join(wnames)
 	t += "Boxes: "
 	for box in data.system_boxes:
 		var col: String = {"H": "lime", "S": "lightblue", "A": "yellow", "D": "cyan"}.get(box, "orange")
@@ -327,15 +381,24 @@ func _on_db_selected(index: int) -> void:
 		t += "[i]%s[/i]\n" % data.description
 	_preview_rtl.text = t
 
+
+# ── Signal handlers ──────────────────────────────────────────────────────────
+
+func _on_your_selected(index: int) -> void:
 	_add_human_btn.disabled = false
+	_show_ship_preview(_your_paths[index])
+
+
+func _on_enemy_db_selected(index: int) -> void:
 	_add_ai_btn.disabled = false
+	_show_ship_preview(_enemy_paths[index])
 
 
 func _on_add_human_pressed() -> void:
-	var sel := _db_list.get_selected_items()
+	var sel := _your_list.get_selected_items()
 	if sel.is_empty():
 		return
-	var path := _db_paths[sel[0]]
+	var path := _your_paths[sel[0]]
 	var data := load(path) as ShipData
 	_human_fleet.append(path)
 	_human_list.add_item(data.ship_name if data else path.get_file())
@@ -343,10 +406,10 @@ func _on_add_human_pressed() -> void:
 
 
 func _on_add_ai_pressed() -> void:
-	var sel := _db_list.get_selected_items()
+	var sel := _enemy_db_list.get_selected_items()
 	if sel.is_empty():
 		return
-	var path := _db_paths[sel[0]]
+	var path := _enemy_paths[sel[0]]
 	var data := load(path) as ShipData
 	_ai_fleet.append(path)
 	_ai_list.add_item(data.ship_name if data else path.get_file())
@@ -384,7 +447,7 @@ func _update_start_button() -> void:
 	var ok := not _human_fleet.is_empty() and not _ai_fleet.is_empty()
 	_start_btn.disabled = not ok
 	if ok:
-		_status_lbl.text = "Human: %d ship(s)   AI: %d ship(s)   — Ready to battle!" % [
+		_status_lbl.text = "Your Fleet: %d ship(s)   AI Fleet: %d ship(s)   — Ready to battle!" % [
 			_human_fleet.size(), _ai_fleet.size()
 		]
 	else:
@@ -408,6 +471,7 @@ func _on_player_faction_changed(index: int) -> void:
 	var player_faction: String = FACTIONS[index]
 	var enemy_faction: String = FACTION_DEFAULTS.get(player_faction, "Arachnid") as String
 	_enemy_faction_opt.selected = FACTIONS.find(enemy_faction)
+	_reload_db_lists()
 
 
 func _on_back_pressed() -> void:

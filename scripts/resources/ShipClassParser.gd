@@ -200,16 +200,18 @@ static func _map_token(tok: String, w_idx: int, weapons: Array[Resource]) -> Str
 	# Drive systems
 	if tok == "D" or tok == "Di" or tok == "Q":
 		return "D"
-	# Weapon systems (any R/F/L/M/G variant)
-	var weapon_codes := ["R","Ra","Rb","Rc","F","Fa","Fb","Fc","L","La","Lb","Lc","Lh","M","M2","Mg","G","Ga","Gb","Gc"]
+	# Weapon systems — Mg = Magazine (missile storage, not a weapon),
+	# Lh = Life Support Hold (not a weapon); both are intentionally excluded.
+	var weapon_codes := ["R","Ra","Rb","Rc","F","Fa","Fb","Fc","L","La","Lb","Lc","M","M2","G","Ga","Gb","Gc"]
 	if tok in weapon_codes:
 		var wd := WeaponData.new()
-		wd.weapon_name = tok
-		wd.damage = 3
-		wd.range_hexes = 6
-		wd.arc = WeaponData.ArcType.ALL_ROUND
+		wd.weapon_name  = tok
+		wd.weapon_type  = WeaponData.type_for_name(tok)
+		wd.damage       = WeaponData.max_damage_for_name(tok)
+		wd.range_hexes  = WeaponData.max_range_for_name(tok)
+		wd.arc          = WeaponData.ArcType.ALL_ROUND
 		wd.shots_per_turn = 1
 		weapons.append(wd)
 		return "W%d" % w_idx
-	# Skip: Z, CIC, AM, XO, HS, Xr, Bb, and other electronics/command tokens
+	# Skip: Mg (magazine), Lh (life support), Z, CIC, AM, XO, HS, Xr, Bb, etc.
 	return ""

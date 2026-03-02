@@ -62,11 +62,17 @@ func _on_ship_selected(ship: Node) -> void:
 			var disabled: bool = s._is_weapon_destroyed(i)
 			if disabled:
 				t += "  [color=gray][s]%s  Dmg %d  Rng %d  %s[/s] [DESTROYED][/color]\n" % [
-					w.weapon_name, w.damage, w.range_hexes, arc_label
+					w.weapon_name,
+					WeaponData.max_damage_for_name(w.weapon_name),
+					WeaponData.max_range_for_name(w.weapon_name),
+					arc_label
 				]
 			else:
 				t += "  [b]%s[/b]  Dmg %d  Rng %d  %s\n" % [
-					w.weapon_name, w.damage, w.range_hexes, arc_label
+					w.weapon_name,
+					WeaponData.max_damage_for_name(w.weapon_name),
+					WeaponData.max_range_for_name(w.weapon_name),
+					arc_label
 				]
 	else:
 		t += "[color=gray]No weapons[/color]\n"

@@ -263,10 +263,17 @@ func _on_list_ship_selected(index: int) -> void:
 		_detail_rtl.text = "[color=red]Failed to load.[/color]"
 		return
 
-	var t := "[b]%s[/b]  (class: %s)\n" % [data.ship_name, data.ship_class]
+	var t := "[b]%s[/b]  (class: %s)  [color=gray]%s[/color]\n" % [data.ship_name, data.ship_class, data.faction_id]
 	t += "Drive: %d   Hull: %d   Weapons: %d\n" % [
 		data.drive_rating, data.hull_points, data.weapons.size()
 	]
+	if data.weapons.size() > 0:
+		var wnames: Array[String] = []
+		for w in data.weapons:
+			var wd := w as WeaponData
+			if wd:
+				wnames.append(wd.weapon_name)
+		t += "[color=orange]%s[/color]\n" % ", ".join(wnames)
 	t += "Boxes: "
 	for box in data.system_boxes:
 		var col: String = {"H": "lime", "S": "lightblue", "A": "yellow", "D": "cyan"}.get(box, "orange")
@@ -374,7 +381,9 @@ func _show_preview(data: ShipData) -> void:
 			var wd := w as WeaponData
 			if wd:
 				t += "  [color=orange]%s[/color]  dmg %d  rng %d\n" % [
-					wd.weapon_name, wd.damage, wd.range_hexes
+					wd.weapon_name,
+					WeaponData.max_damage_for_name(wd.weapon_name),
+					WeaponData.max_range_for_name(wd.weapon_name)
 				]
 	else:
 		t += "[color=gray]No weapons detected[/color]\n"

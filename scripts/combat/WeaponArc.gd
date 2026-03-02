@@ -47,9 +47,11 @@ static func get_arc_hexes(
 	var ship_cube := HexGrid.offset_to_cube(ship_hex.x, ship_hex.y)
 	var in_arc: Array[Vector2i] = []
 
+	var max_range := WeaponData.max_range_for_name(weapon.weapon_name)
+
 	# ALL_ROUND: skip angle check entirely
 	if arc_type == WeaponData.ArcType.ALL_ROUND:
-		for r in range(1, weapon.range_hexes + 1):
+		for r in range(1, max_range + 1):
 			for hex_cube in HexGrid.cube_ring(ship_cube, r):
 				var offset := HexGrid.cube_to_offset(hex_cube)
 				if map_bounds.has_point(offset):
@@ -66,7 +68,7 @@ static func get_arc_hexes(
 
 	var ship_world := HexGrid.offset_to_world(ship_hex, 1.0)
 
-	for r in range(1, weapon.range_hexes + 1):
+	for r in range(1, max_range + 1):
 		for hex_cube in HexGrid.cube_ring(ship_cube, r):
 			var offset := HexGrid.cube_to_offset(hex_cube)
 			if not map_bounds.has_point(offset):
