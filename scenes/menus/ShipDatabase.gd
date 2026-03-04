@@ -5,7 +5,8 @@ extends CanvasLayer
 const DATA_DIR   := "res://data/ships/"
 const SPRITE_DIR := "res://assets/ship_images/"
 
-var _ship_paths: Array[String] = []      # sorted .tres paths
+var _ship_paths: Array[String] = []      # sorted .tres paths (ships only, no headers)
+var _list_to_ship_idx: Array[int] = []   # list item index → _ship_paths index; -1 = faction header
 var _selected_list_index: int = -1       # which saved ship is highlighted
 var _parsed_data: ShipData = null
 var _sprite_codes: Array[String] = []    # e.g. ["bb", "bc", "ca", ...]
@@ -223,6 +224,7 @@ func _populate_sprite_options() -> void:
 
 func _refresh_ship_list() -> void:
 	_ship_paths.clear()
+	_list_to_ship_idx.clear()
 	_selected_list_index = -1
 	_delete_btn.disabled = true
 	_edit_btn.disabled = true
@@ -233,32 +235,63 @@ func _refresh_ship_list() -> void:
 	if not dir:
 		return
 
-	var names: Array[String] = []
+	# Collect all .tres files and load their faction_id
+	var entries: Array = []   # Array of {path, display, faction}
 	dir.list_dir_begin()
 	var f := dir.get_next()
 	while f != "":
 		if f.ends_with(".tres"):
-			names.append(f)
+			var path := DATA_DIR + f
+			var data := load(path) as ShipData
+			entries.append({
+				"path": path,
+				"display": data.ship_name if data else f.replace(".tres", ""),
+				"faction": data.faction_id if (data and data.faction_id != "") else "Unknown"
+			})
 		f = dir.get_next()
 	dir.list_dir_end()
-	names.sort()
 
-	for name in names:
-		var path := DATA_DIR + name
-		_ship_paths.append(path)
-		var data := load(path) as ShipData
-		var display := data.ship_name if data else name.replace(".tres", "")
-		_list.add_item(display)
+	# Sort entries: primary = faction order, secondary = display name
+	const FACTION_ORDER := ["TFN", "Ophiuchi", "KON", "Gorm", "Rigelian", "Arachnid"]
+	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var ai := FACTION_ORDER.find(a.faction)
+		var bi := FACTION_ORDER.find(b.faction)
+		if ai < 0: ai = FACTION_ORDER.size()
+		if bi < 0: bi = FACTION_ORDER.size()
+		if ai != bi:
+			return ai < bi
+		return a.display < b.display
+	)
+
+	# Build the list, inserting a faction header whenever the faction changes
+	var current_faction := ""
+	for entry in entries:
+		var faction: String = entry.faction
+		if faction != current_faction:
+			current_faction = faction
+			# Add non-selectable header row
+			_list.add_item("── %s ──" % faction)
+			var header_idx := _list.item_count - 1
+			_list.set_item_selectable(header_idx, false)
+			_list.set_item_disabled(header_idx, true)
+			_list_to_ship_idx.append(-1)
+
+		_ship_paths.append(entry.path)
+		_list.add_item(entry.display)
+		_list_to_ship_idx.append(_ship_paths.size() - 1)
 
 
 # ── Signal handlers ──────────────────────────────────────────────────────────
 
 func _on_list_ship_selected(index: int) -> void:
-	_selected_list_index = index
+	var ship_idx := _list_to_ship_idx[index] if index < _list_to_ship_idx.size() else -1
+	if ship_idx < 0:
+		return   # header row clicked — ignore
+	_selected_list_index = ship_idx
 	_delete_btn.disabled = false
 	_edit_btn.disabled = false
 
-	var data := load(_ship_paths[index]) as ShipData
+	var data := load(_ship_paths[ship_idx]) as ShipData
 	if data == null:
 		_detail_rtl.text = "[color=red]Failed to load.[/color]"
 		return
