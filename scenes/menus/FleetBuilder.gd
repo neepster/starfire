@@ -299,21 +299,32 @@ func _reload_db_lists() -> void:
 	if not dir:
 		return
 
-	var names: Array[String] = []
+	var entries: Array = []
 	dir.list_dir_begin()
 	var f := dir.get_next()
 	while f != "":
 		if f.ends_with(".tres"):
-			names.append(f)
+			var path := DATA_DIR + f
+			var data := load(path) as ShipData
+			if data != null:
+				entries.append({"path": path, "data": data})
 		f = dir.get_next()
 	dir.list_dir_end()
-	names.sort()
 
-	for name in names:
-		var path := DATA_DIR + name
-		var data := load(path) as ShipData
-		if data == null:
-			continue
+	const CLASS_ORDER := ["Fighter", "Strike", "ES", "CT", "FG", "DD", "CL", "CA", "BC", "BB", "DN", "SD", "CVL", "CV"]
+	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var ci := CLASS_ORDER.find((a.data as ShipData).ship_class)
+		var di := CLASS_ORDER.find((b.data as ShipData).ship_class)
+		if ci < 0: ci = CLASS_ORDER.size()
+		if di < 0: di = CLASS_ORDER.size()
+		if ci != di:
+			return ci < di
+		return (a.data as ShipData).ship_name < (b.data as ShipData).ship_name
+	)
+
+	for entry in entries:
+		var path: String = entry.path
+		var data := entry.data as ShipData
 		var label := "%s  [%s]" % [data.ship_name, data.ship_class]
 		if data.faction_id == your_faction:
 			_your_paths.append(path)

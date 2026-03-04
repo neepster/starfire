@@ -235,8 +235,8 @@ func _refresh_ship_list() -> void:
 	if not dir:
 		return
 
-	# Collect all .tres files and load their faction_id
-	var entries: Array = []   # Array of {path, display, faction}
+	# Collect all .tres files and load their faction_id and class
+	var entries: Array = []   # Array of {path, display, faction, ship_class}
 	dir.list_dir_begin()
 	var f := dir.get_next()
 	while f != "":
@@ -246,13 +246,15 @@ func _refresh_ship_list() -> void:
 			entries.append({
 				"path": path,
 				"display": data.ship_name if data else f.replace(".tres", ""),
-				"faction": data.faction_id if (data and data.faction_id != "") else "Unknown"
+				"faction": data.faction_id if (data and data.faction_id != "") else "Unknown",
+				"ship_class": data.ship_class if data else ""
 			})
 		f = dir.get_next()
 	dir.list_dir_end()
 
-	# Sort entries: primary = faction order, secondary = display name
+	# Sort: primary = faction, secondary = class size, tertiary = display name
 	const FACTION_ORDER := ["TFN", "Ophiuchi", "KON", "Gorm", "Rigelian", "Arachnid"]
+	const CLASS_ORDER := ["Fighter", "Strike", "ES", "CT", "FG", "DD", "CL", "CA", "BC", "BB", "DN", "SD", "CVL", "CV"]
 	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		var ai := FACTION_ORDER.find(a.faction)
 		var bi := FACTION_ORDER.find(b.faction)
@@ -260,6 +262,12 @@ func _refresh_ship_list() -> void:
 		if bi < 0: bi = FACTION_ORDER.size()
 		if ai != bi:
 			return ai < bi
+		var ci := CLASS_ORDER.find(a.ship_class)
+		var di := CLASS_ORDER.find(b.ship_class)
+		if ci < 0: ci = CLASS_ORDER.size()
+		if di < 0: di = CLASS_ORDER.size()
+		if ci != di:
+			return ci < di
 		return a.display < b.display
 	)
 
