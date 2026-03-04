@@ -46,6 +46,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(140, 40)
 text = "End Turn"
 
+[node name="BtnQuitBattle" type="Button" parent="TopBar/HBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 40)
+text = "Quit Battle"
+
 [node name="BottomPanel" type="PanelContainer" parent="."]
 anchor_top = 1.0
 anchor_right = 0.4

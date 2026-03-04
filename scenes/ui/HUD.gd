@@ -8,6 +8,7 @@ const MAX_LOG_LINES := 20
 @onready var btn_import: Button = $TopBar/HBoxContainer/BtnImportShip
 @onready var btn_combat_speed: Button = $TopBar/HBoxContainer/BtnCombatSpeed
 @onready var btn_end_turn: Button = $TopBar/HBoxContainer/BtnEndTurn
+@onready var btn_quit_battle: Button = $TopBar/HBoxContainer/BtnQuitBattle
 @onready var log_text: RichTextLabel = $CombatLog/VBox/LogText
 
 var _log_lines: Array[String] = []
@@ -18,6 +19,7 @@ func _ready() -> void:
 	EventBus.weapon_fired.connect(_on_weapon_fired)
 	EventBus.ship_destroyed.connect(_on_ship_destroyed)
 	btn_end_turn.pressed.connect(_on_end_turn_pressed)
+	btn_quit_battle.pressed.connect(_on_quit_battle_pressed)
 	btn_import.pressed.connect(func() -> void: EventBus.import_ship_requested.emit())
 	btn_combat_speed.pressed.connect(_on_combat_speed_pressed)
 	btn_combat_speed.text = "Combat: Slow" if GameManager.combat_slow else "Combat: Fast"
@@ -43,6 +45,10 @@ func _on_phase_changed(_phase: int) -> void:
 
 func _on_end_turn_pressed() -> void:
 	TurnManager.advance_phase()
+
+
+func _on_quit_battle_pressed() -> void:
+	SceneLoader.load_scene("res://scenes/menus/MainMenu.tscn")
 
 
 func _on_combat_speed_pressed() -> void:
