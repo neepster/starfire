@@ -19,7 +19,16 @@ static func parse(input: String) -> ShipData:
 	_extract_drive(input, data)
 	_extract_boxes(input, data)
 	data.sprite_path = _guess_sprite(data.ship_class)
+	data.fighter_capacity = _guess_fighter_capacity(data.ship_class)
 	return data
+
+
+## Return fighter capacity for carrier class codes.
+static func _guess_fighter_capacity(ship_class: String) -> int:
+	match ship_class:
+		"CV":  return 4
+		"CVL": return 2
+	return 0
 
 
 ## Infer sprite path from class code (e.g. "DD" → "dd_blue.png").
