@@ -4,8 +4,6 @@
 extends CanvasLayer
 
 const DATA_DIR := "res://data/ships/"
-const DEFAULT_HUMAN_PATH := "res://data/ships/escort_dd.tres"
-const DEFAULT_AI_PATH    := "res://data/ships/cruiser_ca.tres"
 
 # Parallel arrays for each faction's ship list
 var _your_paths:  Array[String] = []   # ships matching player faction
@@ -48,7 +46,7 @@ const FACTION_DEFAULTS := {
 func _ready() -> void:
 	_build_ui()
 	_reload_db_lists()
-	_prepopulate_defaults()
+	_update_start_button()
 
 
 # ── UI Construction ──────────────────────────────────────────────────────────
@@ -335,14 +333,6 @@ func _reload_db_lists() -> void:
 	if _enemy_db_list.item_count > 0:
 		_enemy_db_list.select(0)
 		_on_enemy_db_selected(0)
-
-
-func _prepopulate_defaults() -> void:
-	_try_add_to_fleet(DEFAULT_HUMAN_PATH, "human")
-	_try_add_to_fleet(DEFAULT_HUMAN_PATH, "human")
-	_try_add_to_fleet(DEFAULT_AI_PATH, "ai")
-	_try_add_to_fleet(DEFAULT_AI_PATH, "ai")
-	_update_start_button()
 
 
 func _try_add_to_fleet(path: String, side: String) -> void:
