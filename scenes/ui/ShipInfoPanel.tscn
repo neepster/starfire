@@ -6,14 +6,17 @@
 script = ExtResource("1_shipinfo")
 custom_minimum_size = Vector2(340, 160)
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBox"]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="InfoText" type="RichTextLabel" parent="MarginContainer"]
+[node name="InfoText" type="RichTextLabel" parent="VBox/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
 fit_content = true

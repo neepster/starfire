@@ -22,4 +22,5 @@ weapons = [SubResource("weapon_1")]
 system_boxes = PackedStringArray("A", "A", "H", "H", "H", "H", "H", "H", "D", "D", "W0")
 sprite_path = "res://assets/ship_images/cvl_blue.png"
 faction_id = "TFN"
+fighter_capacity = 2
 description = "Light carrier. Faster than a full carrier but carries fewer fighters."

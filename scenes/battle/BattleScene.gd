@@ -8,6 +8,7 @@ const RESULT_SCREEN_SCENE := preload("res://scenes/ui/BattleResultScreen.tscn")
 
 const DEFAULT_HUMAN_SHIP_PATH := "res://data/ships/escort_dd.tres"
 const DEFAULT_AI_SHIP_PATH    := "res://data/ships/cruiser_ca.tres"
+const STRIKE_DATA_PATH := "res://data/ships/templates/strike_group.tres"
 
 @onready var hex_map: HexMap = $WorldRoot/HexMap
 @onready var ship_container: Node2D = $WorldRoot/ShipContainer
@@ -28,6 +29,7 @@ var _placement_lbl: Label = null
 
 var _fleet_panel: FleetStatusPanel = null
 var _enemy_panel: FleetStatusPanel = null
+var _launch_pending_carrier: Ship = null
 
 
 func _ready() -> void:
@@ -46,6 +48,7 @@ func _ready() -> void:
 func _setup_ai() -> void:
 	_ai_controller = AIController.new()
 	add_child(_ai_controller)
+	_ai_controller.battle_scene = self
 
 
 func _setup_highlighter() -> void:
@@ -113,6 +116,8 @@ func _connect_signals() -> void:
 	EventBus.turn_phase_changed.connect(_on_phase_changed)
 	EventBus.import_ship_requested.connect(_on_import_ship_requested)
 	EventBus.ship_import_confirmed.connect(_on_ship_import_confirmed)
+	EventBus.launch_fighters_requested.connect(_start_launch)
+	EventBus.recover_fighters_requested.connect(_do_recover)
 
 
 # ── Placement phase ───────────────────────────────────────────────────────────
@@ -359,6 +364,9 @@ func _on_hex_clicked(hex: Vector2i) -> void:
 	if _placement_mode:
 		_on_placement_hex_clicked(hex)
 		return
+	if _launch_pending_carrier != null:
+		_do_launch(hex)
+		return
 	if _selected_ship == null:
 		return
 	if TurnManager.current_phase != TurnManager.Phase.MOVEMENT_PLOT:
@@ -374,6 +382,9 @@ func _on_hex_clicked(hex: Vector2i) -> void:
 
 
 func _on_ship_destroyed(_ship: Node) -> void:
+	var ds := _ship as Ship
+	if ds != null and ds.is_strike_group and is_instance_valid(ds.parent_carrier):
+		(ds.parent_carrier as Ship).on_group_destroyed(ds)
 	if _selected_ship == _ship:
 		_selected_ship = null
 	var winner := GameManager.check_victory()
@@ -389,6 +400,9 @@ func _show_result_screen(winner: String) -> void:
 
 
 func _on_phase_changed(phase: int) -> void:
+	if _launch_pending_carrier != null:
+		_launch_pending_carrier = null
+		_highlighter.clear_all()
 	_highlighter.clear_all()
 	_deselect_ship()
 
@@ -440,6 +454,69 @@ func _refresh_movement_highlight(ship: Ship) -> void:
 		_highlighter.show_movement_range(reachable)
 	else:
 		_highlighter.clear_all()
+
+
+func _start_launch(carrier: Node) -> void:
+	var c := carrier as Ship
+	if c == null or not c.can_launch():
+		return
+	_launch_pending_carrier = c
+	_highlighter.show_movement_range(_get_valid_launch_hexes(c))
+
+
+func _do_launch(hex: Vector2i) -> void:
+	var carrier := _launch_pending_carrier
+	_launch_pending_carrier = null
+	_highlighter.clear_all()
+	if not _is_valid_launch_hex(carrier, hex):
+		return
+	var strike_data := load(STRIKE_DATA_PATH) as ShipData
+	if strike_data == null:
+		return
+	var group_data := strike_data.duplicate(true) as ShipData
+	group_data.faction_id = carrier.ship_data.faction_id
+	var group := _spawn_ship(group_data, carrier.faction, hex, carrier.facing) as Ship
+	if group == null:
+		return
+	group.ship_name = "%s Strike" % carrier.ship_name
+	carrier.on_group_launched(group)
+	EventBus.fighter_group_launched.emit(carrier, group)
+
+
+func _do_recover(group_node: Node) -> void:
+	var group := group_node as Ship
+	if group == null or group.parent_carrier == null:
+		return
+	var carrier := group.parent_carrier as Ship
+	if carrier == null or carrier._is_destroyed:
+		return
+	if HexGrid.offset_distance(group.hex_position, carrier.hex_position) != 1:
+		return
+	carrier.recover_group(group)
+	GameManager.unregister_ship(group)
+	EventBus.fighter_group_recovered.emit(carrier, group)
+	group.queue_free()
+
+
+func _get_valid_launch_hexes(carrier: Ship) -> Array[Vector2i]:
+	var cube := HexGrid.offset_to_cube(carrier.hex_position.x, carrier.hex_position.y)
+	var bounds := Rect2i(0, 0, GameManager.map_cols, GameManager.map_rows)
+	var result: Array[Vector2i] = []
+	for nc in HexGrid.cube_ring(cube, 1):
+		var off := HexGrid.cube_to_offset(nc)
+		if bounds.has_point(off) and hex_map.is_hex_passable(off) and not _is_hex_occupied(off):
+			result.append(off)
+	return result
+
+
+func _is_valid_launch_hex(carrier: Ship, hex: Vector2i) -> bool:
+	return hex in _get_valid_launch_hexes(carrier)
+
+
+## Public entry point for AIController to launch a group without UI flow.
+func launch_group(carrier: Ship, hex: Vector2i) -> void:
+	_launch_pending_carrier = carrier
+	_do_launch(hex)
 
 
 func _show_weapon_arcs(ship: Ship) -> void:

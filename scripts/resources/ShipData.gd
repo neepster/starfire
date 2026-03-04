@@ -12,3 +12,4 @@ extends Resource
 @export var description: String = ""          # flavour text for info panel
 @export var faction_id: String = "TFN"        # lore faction: TFN/Ophiuchi/KON/Gorm/Rigelian/Arachnid
 @export var system_boxes: PackedStringArray = []  # Ordered Starfire system boxes: "H","A","D","W0","W1"…
+@export var fighter_capacity: int = 0             # strike groups the carrier holds (0 = non-carrier)

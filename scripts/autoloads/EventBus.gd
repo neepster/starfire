@@ -23,3 +23,9 @@ signal scenario_selected(scenario: Resource)
 # Ship import signals
 signal import_ship_requested()
 signal ship_import_confirmed(data: ShipData, faction: String)
+
+# Fighter launch/recover signals
+signal launch_fighters_requested(carrier: Node)
+signal recover_fighters_requested(group: Node)
+signal fighter_group_launched(carrier: Node, group: Node)
+signal fighter_group_recovered(carrier: Node, group: Node)

@@ -20,6 +20,12 @@ var _weapon_ready: Array[bool] = [] # per-weapon "not yet fired this turn" flag
 var _is_selected: bool = false
 var _is_destroyed: bool = false     # guard against double-destruction
 
+# Fighter/carrier state
+var is_strike_group: bool = false
+var parent_carrier: Ship = null
+var available_groups: int = 0
+var launched_groups: Array[Node] = []
+
 ## True only when every non-destroyed weapon has been assigned a target this turn.
 ## Ships with no weapons are considered done.
 var has_fired: bool:
@@ -27,6 +33,8 @@ var has_fired: bool:
 		if ship_data == null:
 			return true
 		for i in _weapon_ready.size():
+			if is_strike_group and i >= current_hull:
+				continue   # dead fighter slot — skip
 			if _weapon_ready[i] and not _is_weapon_destroyed(i):
 				return false   # at least one weapon still ready
 		return true
@@ -85,6 +93,9 @@ func initialize(data: ShipData, ship_faction: String, start_hex: Vector2i, start
 	position = HexGrid.offset_to_world(hex_position, HEX_SIZE)
 	_apply_facing()
 
+	if data.fighter_capacity > 0:
+		available_groups = data.fighter_capacity
+
 
 func move_to_hex(target: Vector2i) -> void:
 	var dist: int = HexGrid.offset_distance(hex_position, target)
@@ -140,6 +151,8 @@ func fire_at(target: Node) -> void:
 		return
 	var target_ship := target as Ship
 	for i in ship_data.weapons.size():
+		if is_strike_group and i >= current_hull:
+			continue   # this fighter slot is destroyed
 		var weapon := ship_data.weapons[i] as WeaponData
 		if weapon == null or _is_weapon_destroyed(i) or not _weapon_ready[i]:
 			continue
@@ -227,6 +240,28 @@ func _is_weapon_destroyed(idx: int) -> bool:
 		if ship_data.system_boxes[i] == key:
 			return i < destroyed_box_count
 	return false
+
+
+func can_launch() -> bool:
+	return ship_data != null and ship_data.fighter_capacity > 0 \
+		and available_groups > 0 and not _is_destroyed
+
+
+func on_group_launched(group: Ship) -> void:
+	available_groups -= 1
+	launched_groups.append(group)
+	group.parent_carrier = self
+	group.is_strike_group = true
+
+
+func on_group_destroyed(group: Ship) -> void:
+	launched_groups.erase(group)   # permanently lost; available_groups unchanged
+
+
+func recover_group(group: Ship) -> void:
+	if group in launched_groups:
+		launched_groups.erase(group)
+		available_groups += 1
 
 
 func _apply_facing() -> void:

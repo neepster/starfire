@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="ShipData" load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/ShipData.gd" id="1_shipdata"]
+[ext_resource type="Script" path="res://scripts/resources/WeaponData.gd" id="2_weapondata"]
+
+[sub_resource type="Resource" id="weapon_0"]
+script = ExtResource("2_weapondata")
+weapon_name = "R"
+weapon_type = 4
+damage = 1
+range_hexes = 10
+arc = 5
+shots_per_turn = 1
+
+[sub_resource type="Resource" id="weapon_1"]
+script = ExtResource("2_weapondata")
+weapon_name = "R"
+weapon_type = 4
+damage = 1
+range_hexes = 10
+arc = 5
+shots_per_turn = 1
+
+[sub_resource type="Resource" id="weapon_2"]
+script = ExtResource("2_weapondata")
+weapon_name = "R"
+weapon_type = 4
+damage = 1
+range_hexes = 10
+arc = 5
+shots_per_turn = 1
+
+[sub_resource type="Resource" id="weapon_3"]
+script = ExtResource("2_weapondata")
+weapon_name = "R"
+weapon_type = 4
+damage = 1
+range_hexes = 10
+arc = 5
+shots_per_turn = 1
+
+[sub_resource type="Resource" id="weapon_4"]
+script = ExtResource("2_weapondata")
+weapon_name = "R"
+weapon_type = 4
+damage = 1
+range_hexes = 10
+arc = 5
+shots_per_turn = 1
+
+[sub_resource type="Resource" id="weapon_5"]
+script = ExtResource("2_weapondata")
+weapon_name = "R"
+weapon_type = 4
+damage = 1
+range_hexes = 10
+arc = 5
+shots_per_turn = 1
+
+[resource]
+script = ExtResource("1_shipdata")
+ship_name = "Strike Group"
+ship_class = "Strike"
+hull_points = 0
+drive_rating = 8
+fighter_capacity = 0
+weapons = [SubResource("weapon_0"), SubResource("weapon_1"), SubResource("weapon_2"), SubResource("weapon_3"), SubResource("weapon_4"), SubResource("weapon_5")]
+system_boxes = PackedStringArray("H", "H", "H", "H", "H", "H")
+sprite_path = "res://assets/ship_images/strike_blue.png"
+faction_id = "TFN"
+description = "Strike group of 6 fighters. Firepower scales with surviving fighters."

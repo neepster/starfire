@@ -3,8 +3,11 @@
 class_name AIController
 extends Node
 
+var battle_scene: Node = null
+
 
 func take_turn() -> void:
+	_plan_launches()
 	_plan_movement()
 	_execute_movement()
 	await _plan_fire()
@@ -49,6 +52,42 @@ func _plan_fire() -> void:
 		var dist: int = HexGrid.offset_distance(ai_ship.hex_position, target.hex_position)
 		if dist <= 6:
 			await ai_ship.fire_at(target)
+
+
+func _plan_launches() -> void:
+	if battle_scene == null:
+		return
+	for node in GameManager.ai_fleet.duplicate():
+		var ship := node as Ship
+		if ship == null or not is_instance_valid(ship) or not ship.can_launch():
+			continue
+		# Find nearest human ship
+		var nearest: Ship = null
+		var best_dist := 99999
+		for hn in GameManager.human_fleet:
+			var hs := hn as Ship
+			if hs == null or not is_instance_valid(hs):
+				continue
+			var d := HexGrid.offset_distance(ship.hex_position, hs.hex_position)
+			if d < best_dist:
+				best_dist = d
+				nearest = hs
+		if nearest == null:
+			continue
+		# Pick adjacent hex closest to target; launch one group per carrier per turn
+		var best_hex := Vector2i(-1, -1)
+		var best_d2 := 99999
+		var cube := HexGrid.offset_to_cube(ship.hex_position.x, ship.hex_position.y)
+		var bounds := Rect2i(0, 0, GameManager.map_cols, GameManager.map_rows)
+		for nc in HexGrid.cube_ring(cube, 1):
+			var off := HexGrid.cube_to_offset(nc)
+			if bounds.has_point(off):
+				var d2 := HexGrid.offset_distance(off, nearest.hex_position)
+				if d2 < best_d2:
+					best_d2 = d2
+					best_hex = off
+		if best_hex.x >= 0:
+			battle_scene.launch_group(ship, best_hex)
 
 
 func _find_nearest_human_ship(from_ship: Ship) -> Ship:

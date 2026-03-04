@@ -21,6 +21,14 @@ func _ready() -> void:
 	btn_import.pressed.connect(func() -> void: EventBus.import_ship_requested.emit())
 	btn_combat_speed.pressed.connect(_on_combat_speed_pressed)
 	btn_combat_speed.text = "Combat: Slow" if GameManager.combat_slow else "Combat: Fast"
+	EventBus.fighter_group_launched.connect(
+		func(c: Node, g: Node) -> void:
+			_add_log("[color=cyan]%s launched %s[/color]" % [
+				(c as Ship).ship_name, (g as Ship).ship_name]))
+	EventBus.fighter_group_recovered.connect(
+		func(c: Node, g: Node) -> void:
+			_add_log("[color=gray]%s recovered by %s[/color]" % [
+				(g as Ship).ship_name, (c as Ship).ship_name]))
 	_refresh_labels()
 
 
