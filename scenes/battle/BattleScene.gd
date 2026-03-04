@@ -159,9 +159,10 @@ func _update_placement_ui() -> void:
 		_finish_placement()
 	else:
 		var next := _ships_to_place[0]
+		var class_str := " (%s)" % next.ship_data.ship_class if next.ship_data != null else ""
 		_placement_lbl.text = \
-			"SETUP — Click left half to place: %s   (%d ship(s) remaining)" % [
-				next.ship_name, _ships_to_place.size()
+			"SETUP — Click left half to place: %s%s   (%d ship(s) remaining)" % [
+				next.ship_name, class_str, _ships_to_place.size()
 			]
 		_highlight_deployment_zone()
 
