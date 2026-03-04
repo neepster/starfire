@@ -147,28 +147,26 @@ func _build_ui() -> void:
 	_enemy_faction_opt.item_selected.connect(func(_i: int) -> void: _reload_db_lists())
 	settings_bar.add_child(_enemy_faction_opt)
 
-	# ── Body ─────────────────────────────────────────────────────────────────
-	var body := HBoxContainer.new()
+	# ── Body: outer split — db area (left) | fleet lists (right) ─────────────
+	var body := HSplitContainer.new()
 	body.set_anchors_preset(Control.PRESET_FULL_RECT)
 	body.offset_top = 100
-	body.add_theme_constant_override("separation", 8)
 	root.add_child(body)
 
 	# ── Left: two faction-filtered ship lists ─────────────────────────────────
 	var left := VBoxContainer.new()
-	left.custom_minimum_size = Vector2(360, 0)
+	left.custom_minimum_size = Vector2(200, 0)
 	left.add_theme_constant_override("separation", 6)
 	body.add_child(left)
 
-	# Two side-by-side sub-columns inside the left panel
-	var db_split := HBoxContainer.new()
+	# Inner split — your faction list (left) | enemy faction list (right)
+	var db_split := HSplitContainer.new()
 	db_split.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	db_split.add_theme_constant_override("separation", 6)
 	left.add_child(db_split)
 
 	# ── Your Faction column ───────────────────────────────────────────────────
 	var your_col := VBoxContainer.new()
-	your_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	your_col.custom_minimum_size = Vector2(120, 0)
 	your_col.add_theme_constant_override("separation", 4)
 	db_split.add_child(your_col)
 
@@ -189,11 +187,9 @@ func _build_ui() -> void:
 	_add_human_btn.pressed.connect(_on_add_human_pressed)
 	your_col.add_child(_add_human_btn)
 
-	db_split.add_child(VSeparator.new())
-
 	# ── Enemy Faction column ──────────────────────────────────────────────────
 	var enemy_col := VBoxContainer.new()
-	enemy_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	enemy_col.custom_minimum_size = Vector2(120, 0)
 	enemy_col.add_theme_constant_override("separation", 4)
 	db_split.add_child(enemy_col)
 
@@ -222,14 +218,16 @@ func _build_ui() -> void:
 	_preview_rtl.custom_minimum_size = Vector2(0, 110)
 	left.add_child(_preview_rtl)
 
-	# ── Divider ──────────────────────────────────────────────────────────────
-	body.add_child(VSeparator.new())
+	# ── Right side: fleet lists split — your fleet | AI fleet ─────────────────
+	var fleets_split := HSplitContainer.new()
+	fleets_split.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.add_child(fleets_split)
 
 	# ── Center: human fleet ──────────────────────────────────────────────────
 	var center := VBoxContainer.new()
-	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	center.custom_minimum_size = Vector2(120, 0)
 	center.add_theme_constant_override("separation", 6)
-	body.add_child(center)
+	fleets_split.add_child(center)
 
 	var human_hdr := Label.new()
 	human_hdr.text = "Your Fleet"
@@ -248,14 +246,11 @@ func _build_ui() -> void:
 	_remove_human_btn.pressed.connect(_on_remove_human_pressed)
 	center.add_child(_remove_human_btn)
 
-	# ── Divider ──────────────────────────────────────────────────────────────
-	body.add_child(VSeparator.new())
-
 	# ── Right: AI fleet ──────────────────────────────────────────────────────
 	var right := VBoxContainer.new()
-	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right.custom_minimum_size = Vector2(120, 0)
 	right.add_theme_constant_override("separation", 6)
-	body.add_child(right)
+	fleets_split.add_child(right)
 
 	var ai_hdr := Label.new()
 	ai_hdr.text = "AI Fleet"
