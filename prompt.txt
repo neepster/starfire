@@ -1,0 +1,54 @@
+You are helping me build a computerized version of the Starfire tactical space combat game in Godot 4.5.
+
+## Project location
+/mnt/c/Users/Chris/Claude_Code/starfire/
+
+## GitHub
+https://github.com/neepster/starfire  (branch: main)
+Last commit: 1c3692e — "Start window maximized at native 1920x1080"
+
+## What is working right now
+- Hex grid battle map (flat-top, odd-q offset, HEX_SIZE=48)
+- Ship movement (Q=CCW rotate, E=CW rotate), camera pan/zoom
+- Full turn cycle: SETUP → Movement Plot → Weapons Fire → AI Turn → repeat
+- Ship placement phase at battle start (shows name + class in label)
+- Starfire system-box damage model (A/H/D/W boxes, left-to-right)
+- Weapon arcs (Forward, Broadside, Aft, All-Round) with corrected geometry
+- Slow/fast combat toggle; animated projectiles in slow mode
+- Per-weapon split-fire (redirect remaining weapons to new target same turn)
+- AI: greedy movement toward nearest enemy, fires in range, auto-launches carrier strike groups
+- CV/CVL fighter launch & recovery:
+    - Select carrier in Movement Plot → "Launch Fighter Group" button appears
+    - Click → adjacent hexes highlight → click one → strike group spawns (6 fighters, drive 8)
+    - Firepower = surviving fighters (each hit kills one fighter/weapon)
+    - Move strike group adjacent to carrier → "Recover to Carrier" → group removed, carrier +1
+    - AI carriers auto-launch one group per turn toward nearest enemy
+    - ShipClassParser infers fighter_capacity for CV (4) and CVL (2) from class code
+- Post-battle scoreboard overlay
+- Quit Battle button returns to main menu immediately
+- Ship Database: grouped by faction, sorted by class size (ES→FG→DD→CL→CA→BC→BB→DN→SD→CVL→CV)
+- Fleet Builder:
+    - Empty fleets by default (no pre-populated ships)
+    - All panels resizable via HSplitContainer dividers
+    - Ships sorted by class size within each faction column
+    - Faction-filtered ship lists (your faction left, enemy faction right)
+- Ship names from faction pools in ShipNameGenerator.gd (_faction_pools dict)
+- Window starts maximized at native 1920x1080
+
+## Key architecture notes
+- ShipData.fighter_capacity > 0 → ship is a carrier
+- Strike groups live in data/ships/templates/strike_group.tres (hidden from DB/FleetBuilder)
+- Ship.is_strike_group=true, parent_carrier=<Ship ref>, fire_at() skips i >= current_hull slots
+- ShipDatabase uses _list_to_ship_idx array (−1 = faction header row, non-selectable)
+- CLASS_ORDER for sorting: ["Fighter","Strike","ES","CT","FG","DD","CL","CA","BC","BB","DN","SD","CVL","CV"]
+- AIController.take_turn(): _plan_launches() → _plan_movement() → _plan_fire()
+- BattleScene.launch_group(carrier, hex) is the public entry point for AI launches
+
+## My preferences
+- Read files before editing them
+- Commit and push after each feature is complete
+- Keep changes minimal and focused — no over-engineering
+- Use DeepWiki ask_question for Godot API questions before writing code
+- GDScript strict mode: always cast Dictionary.get(), Array[Node] iterations, etc.
+
+Please read the CLAUDE.md and my memory file, then review the current git log to orient yourself, and let me know you are ready to continue.
